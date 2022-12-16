@@ -8,6 +8,7 @@ import Posts from "./pages/Posts/Posts";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import Post from "./components/Post/Post";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage";
+import Categories from "./pages/Categories/Categories";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,10 +17,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="posts" >
+            <Route index element={<Posts />} />
+            <Route path=":postId" element={<SinglePostPage/>} />
+          </Route>
+          <Route path="categories" element={<Categories />} />
+          {/* <Route path="posts" >
             <Route index element={<Posts />}  />
             <Route path="create" element={<CreatePost />} />
             <Route path=":postId" element={<SinglePostPage/>} />
-          </Route>
+          </Route> */}
           {/* <Route path="categories">
             <Route index element={<Categories />} />
             <Route path ="create" element={<CreateCategory />} />
