@@ -18,8 +18,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="posts" >
             <Route index element={<Posts />}  />
             <Route path="create" element={<CreatePost />} />
-            <Route path=":id" element={<SinglePostPage/>} />
+            <Route path=":postId" element={<SinglePostPage/>} />
           </Route>
+          {/* <Route path="categories">
+            <Route index element={<Categories />} />
+            <Route path ="create" element={<CreateCategory />} />
+            <Route path =":categoryId" element={<SingleCategoryPage />} />
+          </Route> */}
         </Route>
       </Routes>
     </BrowserRouter>
