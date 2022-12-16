@@ -1,0 +1,7 @@
+.snippet {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  max-height: 150px;
+  -webkit-box-orient: vertical;
+}

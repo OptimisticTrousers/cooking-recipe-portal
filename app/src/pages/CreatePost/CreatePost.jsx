@@ -11,7 +11,7 @@ const CreatePost = () => {
     }
   };
   return (
-    <form onSubmit={log}>
+    <form >
     <label for="post" class="form__label"/>
     <input id="post" name="post" styleName="form__control"  placeholder="Bob Jones" />
       <Editor
@@ -33,7 +33,7 @@ const CreatePost = () => {
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         }}
       />
-      <button >Log editor content</button>
+      <button onClick={log}>Log editor content</button>
     </form>
   );
 }

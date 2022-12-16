@@ -2,11 +2,10 @@
   height: 100%;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
 main {
-  height: 100%;
+  min-height: 100%;
 }
 
 .logo {
