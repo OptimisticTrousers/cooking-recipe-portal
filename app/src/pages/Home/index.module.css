@@ -1,0 +1,29 @@
+.hero {
+  background-image: url("https://placeimg.com/1000/800/arch");
+  background-size: cover;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.hero__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__text {
+    max-width: 28rem;
+    padding: 3rem;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+}
+
+.hero__description{
+    text-align: center;
+}
