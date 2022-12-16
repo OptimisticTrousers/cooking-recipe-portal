@@ -78,11 +78,6 @@ const SinglePostPage = () => {
         <p styleName="excerpt__author">{author}</p>
       </p>
       <section styleName={`excerpt__description`}>{parse(content)}</section>
-      <section styleName="excerpt__comments">
-      
-        <h3 styleName={`excerpt__subtitle`}>Comments</h3>
-        
-      </section>
     </article>
   );
 };
