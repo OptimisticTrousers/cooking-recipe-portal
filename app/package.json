@@ -12,13 +12,18 @@
     "@chakra-ui/react": "^2.4.3",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.11.0",
+    "@mui/x-data-grid": "^5.17.16",
     "@tinymce/tinymce-react": "^4.2.0",
     "bulma": "^0.9.4",
     "daisyui": "^2.45.0",
+    "date-fns": "^2.29.3",
     "framer-motion": "^7.10.0",
+    "html-react-parser": "^3.0.4",
     "react": "^18.2.0",
     "react-css-modules": "^4.7.11",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
     "react-router-dom": "^6.4.5"
   },
   "devDependencies": {
