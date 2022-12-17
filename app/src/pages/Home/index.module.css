@@ -1,11 +1,13 @@
 .hero {
-  background-image: url("https://placeimg.com/1000/800/arch");
+  margin-top: 6rem;
+  background-image: url(../../assets/food.webp);
   background-size: cover;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  text-align: center;
 }
 
 .hero__container {
@@ -17,13 +19,14 @@
 }
 
 .hero__text {
-    max-width: 28rem;
-    padding: 3rem;
-    border-radius: 4px;
-    background-color: white;
-    color: black;
+  max-width: 28rem;
+  padding: 3rem;
+  border-radius: 4px;
+  background-color: white;
+  color: black;
 }
 
-.hero__description{
-    text-align: center;
+.hero__description {
+  margin-top: 0.5rem;
+  text-align: center;
 }

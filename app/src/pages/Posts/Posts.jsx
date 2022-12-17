@@ -19,6 +19,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import PostModal from "../../components/PostModal/PostModal";
+import "bulma/css/bulma.min.css";
 const data = [
   {
     id: 1,
@@ -209,7 +210,7 @@ const Posts = () => {
   );
 
   return (
-    <Box mt={4}>
+    <Box mt={16}>
       <MaterialReactTable
         displayColumnDefOptions={{
           "mrt-row-actions": {

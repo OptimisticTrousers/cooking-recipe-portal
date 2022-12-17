@@ -18,6 +18,7 @@ import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link } from "react-router-dom";
+import "bulma/css/bulma.min.css";
 const data = [
   { id: 1, name: "Jon", description: "Description of thing" },
   { id: 2, name: "Cersei", description: "Description of thing" },
@@ -137,7 +138,7 @@ const Categories = () => {
   );
 
   return (
-    <Box mt={4}>
+    <Box mt={16}>
       <MaterialReactTable
         displayColumnDefOptions={{
           "mrt-row-actions": {
