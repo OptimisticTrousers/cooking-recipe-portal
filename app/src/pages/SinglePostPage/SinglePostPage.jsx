@@ -68,16 +68,16 @@ const SinglePostPage = () => {
   );
 
   return (
-    <article styleName="excerpt">
-      <h2 styleName={`excerpt__title`}>{title}</h2>
+    <article styleName="post">
+      <h2 styleName={`post__title`}>{title}</h2>
       <hr />
-      <p styleName="excerpt__date">
+      <p styleName="post__date">
         <BsCalendar3 />
         <Date dateString={createdAt} />
         by
-        <p styleName="excerpt__author">{author}</p>
+        <p styleName="post__author">{author}</p>
       </p>
-      <section styleName={`excerpt__description`}>{parse(content)}</section>
+      <section styleName={`post__description`}>{parse(content)}</section>
     </article>
   );
 };

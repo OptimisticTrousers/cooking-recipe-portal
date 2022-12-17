@@ -5,79 +5,19 @@ import useFetch from "../../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import CategoryModal from "../../components/CategoryModal/CategoryModal";
-import { useDisclosure } from "@chakra-ui/react";
-import MaterialReactTable from 'material-react-table';
+import { Button, useDisclosure } from "@chakra-ui/react";
+import MaterialReactTable from "material-react-table";
 
 const data = [
-  {
-    name: {
-      firstName: "John",
-
-      lastName: "Doe",
-    },
-
-    address: "261 Erdman Ford",
-
-    city: "East Daphne",
-
-    state: "Kentucky",
-  },
-
-  {
-    name: {
-      firstName: "Jane",
-
-      lastName: "Doe",
-    },
-
-    address: "769 Dominic Grove",
-
-    city: "Columbus",
-
-    state: "Ohio",
-  },
-
-  {
-    name: {
-      firstName: "Joe",
-
-      lastName: "Doe",
-    },
-
-    address: "566 Brakus Inlet",
-
-    city: "South Linda",
-
-    state: "West Virginia",
-  },
-
-  {
-    name: {
-      firstName: "Kevin",
-
-      lastName: "Vandy",
-    },
-
-    address: "722 Emie Stream",
-
-    city: "Lincoln",
-
-    state: "Nebraska",
-  },
-
-  {
-    name: {
-      firstName: "Joshua",
-
-      lastName: "Rolluffs",
-    },
-
-    address: "32188 Larkin Turnpike",
-
-    city: "Charleston",
-
-    state: "South Carolina",
-  },
+  { id: 1, name: "Jon", description: "Description of thing" },
+  { id: 2, name: "Cersei", description: "Description of thing" },
+  { id: 3, name: "Jaime", description: "Description of thing" },
+  { id: 4, name: "Arya", description: "Description of thing" },
+  { id: 5, name: "Daenerys", description: "Description of thing" },
+  { id: 6, name: "Melisandre", description: "Description of thing" },
+  { id: 7, name: "Ferrara", description: "Description of thing" },
+  { id: 8, name: "Rossini", description: "Description of thing" },
+  { id: 9, name: "Harvey", description: "Description of thing" },
 ];
 
 const Categories = () => {
@@ -88,33 +28,29 @@ const Categories = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "name.firstName", //access nested data with dot notation
+        accessorKey: "name", //access nested data with dot notation
 
-        header: "First Name",
+        header: "Name",
       },
 
       {
-        accessorKey: "name.lastName",
+        accessorKey: "description",
 
-        header: "Last Name",
+        header: "Description",
       },
-
       {
-        accessorKey: "address", //normal accessorKey
-
-        header: "Address",
+        accessorKey: "id",
+        header: "Update",
+        Cell: ({ cell }) => (
+            <button className="button is-warning">Update</button>
+        ),
       },
-
       {
-        accessorKey: "city",
-
-        header: "City",
-      },
-
-      {
-        accessorKey: "state",
-
-        header: "State",
+        accessorKey: "id",
+        header: "Delete",
+        Cell: ({ cell }) => (
+            <button className="button is-danger">Delete</button>
+        ),
       },
     ],
     []

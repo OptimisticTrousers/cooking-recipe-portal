@@ -19,110 +19,69 @@ import MaterialReactTable from "material-react-table";
 
 //nested data is ok, see accessorKeys in ColumnDef below
 
+
 const data = [
-  {
-    name: {
-      firstName: "John",
-
-      lastName: "Doe",
-    },
-
-    address: "261 Erdman Ford",
-
-    city: "East Daphne",
-
-    state: "Kentucky",
-  },
-
-  {
-    name: {
-      firstName: "Jane",
-
-      lastName: "Doe",
-    },
-
-    address: "769 Dominic Grove",
-
-    city: "Columbus",
-
-    state: "Ohio",
-  },
-
-  {
-    name: {
-      firstName: "Joe",
-
-      lastName: "Doe",
-    },
-
-    address: "566 Brakus Inlet",
-
-    city: "South Linda",
-
-    state: "West Virginia",
-  },
-
-  {
-    name: {
-      firstName: "Kevin",
-
-      lastName: "Vandy",
-    },
-
-    address: "722 Emie Stream",
-
-    city: "Lincoln",
-
-    state: "Nebraska",
-  },
-
-  {
-    name: {
-      firstName: "Joshua",
-
-      lastName: "Rolluffs",
-    },
-
-    address: "32188 Larkin Turnpike",
-
-    city: "Charleston",
-
-    state: "South Carolina",
-  },
+  { id: 1, title: "Jon", author: "Description of thing" , content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00"},
+  { id: 2, title: "Cersei", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 3, title: "Jaime", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 4, title: "Arya", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 5, title: "Daenerys", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 6, title: "Melisandre", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 7, title: "Ferrara", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 8, title: "Rossini", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
+  { id: 9, title: "Harvey", author: "Description of thing", content: "<p>Here is a post!</p>", createdAt: "2022-11-26T22:37:47.305+00:00" },
 ];
+
 
 const Posts = () => {
   //should be memoized or stable
   const columns = useMemo(
     () => [
       {
-        accessorKey: "name.firstName", //access nested data with dot notation
+        accessorKey: "title", //access nested data with dot notation
 
-        header: "First Name",
+        header: "Title",
       },
 
       {
-        accessorKey: "name.lastName",
+        accessorKey: "author",
 
-        header: "Last Name",
+        header: "Author",
       },
 
       {
-        accessorKey: "address", //normal accessorKey
+        accessorKey: "content", //normal accessorKey
 
-        header: "Address",
+        header: "Content",
       },
 
       {
-        accessorKey: "city",
+        accessorKey: "createdAt",
 
-        header: "City",
+        header: "Created At",
       },
-
       {
-        accessorKey: "state",
-
-        header: "State",
+        accessorKey: "id",
+        header: "View",
+        Cell: ({ cell }) => (
+          <Link to={`/posts/${cell.getValue()}`}>
+            <button className="button is-info">View</button>
+          </Link>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "Update",
+        Cell: ({ cell }) => (
+            <button className="button is-warning">Update</button>
+        ),
+      },
+      {
+        accessorKey: "id",
+        header: "Delete",
+        Cell: ({ cell }) => (
+            <button className="button is-danger">Delete</button>
+        ),
       },
     ],
 

@@ -1,11 +1,11 @@
-.excerpt__ellipsis {
+.post__ellipsis {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   max-height: 150px;
   -webkit-box-orient: vertical;
 }
-.excerpt__date {
+.post__date {
   display: flex;
   gap: 6px;
   align-items: center;
@@ -13,7 +13,7 @@
   margin-bottom: 2rem;
 }
 
-.excerpt__title {
+.post__title {
   margin-bottom: 0.5rem;
   line-height: initial;
   overflow: hidden;
@@ -22,8 +22,7 @@
   margin-top: 3rem;
 }
 
-.excerpt__subtitle {
-
+.post__subtitle {
   margin-bottom: 0.5rem;
   line-height: initial;
   overflow: hidden;
@@ -32,21 +31,21 @@
   margin-top: 1rem;
 }
 
-.excerpt__title--link {
+.post__title--link {
   color: #699ea0;
   cursor: pointer;
   text-decoration: underline;
 }
 
-.excerpt__title:hover {
+.post__title:hover {
   outline: 0;
 }
 
-.excerpt__author {
+.post__author {
   font-weight: 600;
 }
 
-.excerpt__description {
+.post__description {
   font-size: 2rem;
   line-height: 1.5;
 }
