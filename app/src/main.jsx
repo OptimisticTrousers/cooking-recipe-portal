@@ -5,8 +5,6 @@ import "./index.css";
 import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import Home from "./pages/Home/index";
 import Posts from "./pages/Posts/Posts";
-import CreatePost from "./pages/CreatePost/CreatePost";
-import Post from "./components/Post/Post";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage";
 import Categories from "./pages/Categories/Categories";
 
