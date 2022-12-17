@@ -61,10 +61,9 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
 }
 
-@media (max-width: 320px) {
+@media (max-width: 360px) {
   .flex {
     display: flex;
     flex-direction: column;

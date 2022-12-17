@@ -8,7 +8,7 @@ const navItems = ["Posts", "Categories"];
 const Navbar = () => {
   return (
     <AppBar component="nav">
-      <div className="flex">
+      <div className="flex" style={{padding: "2rem"}}>
         <Link to="/">
           <Typography
             variant="h6"
@@ -17,6 +17,7 @@ const Navbar = () => {
               flexGrow: 1,
               textAlign: { xs: "center", sm: "left" },
               color: "#fff",
+              paddingLeft: {xs: "0px", sm: "12px"}
             }}
           >
             HOME
