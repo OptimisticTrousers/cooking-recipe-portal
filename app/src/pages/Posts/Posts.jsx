@@ -2,98 +2,21 @@ import React, { useCallback, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  MenuItem,
-  Stack,
-  TextField,
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import PostModal from "../../components/PostModal/PostModal";
 import "bulma/css/bulma.min.css";
-const data = [
-  {
-    id: 1,
-    title: "Jon",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 2,
-    title: "Cersei",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 3,
-    title: "Jaime",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 4,
-    title: "Arya",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 5,
-    title: "Daenerys",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 6,
-    title: "Melisandre",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 7,
-    title: "Ferrara",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 8,
-    title: "Rossini",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-  {
-    id: 9,
-    title: "Harvey",
-    author: "Description of thing",
-    content: "<p>Here is a post!</p>",
-    createdAt: "2022-11-26T22:37:47.305+00:00",
-  },
-];
-const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-const validateAge = (age) => age >= 18 && age <= 50;
+import { posts as data } from "../../data/data"; 
+import {
+  validateAge,
+  validateEmail,
+  validateRequired,
+} from "../../utils/utils";
 
 const Posts = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -253,64 +176,8 @@ const Posts = () => {
           </button>
         )}
       />
-      {/* <CreateNewAccountModal
-        columns={columns}
-        open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={handleCreateNewRow}
-      /> */}
       <PostModal isOpen={isOpen} onClose={onClose} />
     </Box>
-  );
-};
-
-//Categories of creating a mui dialog modal for creating new rows
-export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
-  const [values, setValues] = useState(() =>
-    columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ""] = "";
-      return acc;
-    }, {})
-  );
-
-  const handleSubmit = () => {
-    //put your validation logic here
-    onSubmit(values);
-    onClose();
-  };
-
-  return (
-    <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Account</DialogTitle>
-      <DialogContent>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <Stack
-            sx={{
-              width: "100%",
-              minWidth: { xs: "300px", sm: "360px", md: "400px" },
-              gap: "1.5rem",
-            }}
-          >
-            {columns.map((column) => (
-              <TextField
-                key={column.accessorKey}
-                label={column.header}
-                name={column.accessorKey}
-                onChange={(e) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
-              />
-            ))}
-          </Stack>
-        </form>
-      </DialogContent>
-      <DialogActions sx={{ p: "1.25rem" }}>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New Account
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 };
 

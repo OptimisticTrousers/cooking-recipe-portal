@@ -1,3 +1,6 @@
+.post {
+  margin-top: 6rem;
+}
 .post__ellipsis {
   overflow: hidden;
   display: -webkit-box;

@@ -5,7 +5,7 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   ModalOverlay,
@@ -16,8 +16,8 @@ import {
   ModalCloseButton,
   Box,
 } from "@chakra-ui/react";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const PostModal = ({ isOpen, onClose }) => {
   const initialRef = React.useRef(null);
@@ -38,7 +38,10 @@ const PostModal = ({ isOpen, onClose }) => {
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Title</FormLabel>
-              <Input ref={initialRef} placeholder="First Class Pancake Recipe" />
+              <Input
+                ref={initialRef}
+                placeholder="First Class Pancake Recipe"
+              />
             </FormControl>
 
             <FormControl mt={4}>

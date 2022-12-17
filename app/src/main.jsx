@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
-import Home from "./pages/Home/index";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home/Home";
 import Posts from "./pages/Posts/Posts";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage";
 import Categories from "./pages/Categories/Categories";
@@ -14,21 +14,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="posts" >
+          <Route path="posts">
             <Route index element={<Posts />} />
-            <Route path=":postId" element={<SinglePostPage/>} />
+            <Route path=":postId" element={<SinglePostPage />} />
           </Route>
           <Route path="categories" element={<Categories />} />
-          {/* <Route path="posts" >
-            <Route index element={<Posts />}  />
-            <Route path="create" element={<CreatePost />} />
-            <Route path=":postId" element={<SinglePostPage/>} />
-          </Route> */}
-          {/* <Route path="categories">
-            <Route index element={<Categories />} />
-            <Route path ="create" element={<CreateCategory />} />
-            <Route path =":categoryId" element={<SingleCategoryPage />} />
-          </Route> */}
         </Route>
       </Routes>
     </BrowserRouter>

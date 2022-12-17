@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  MenuItem,
   Stack,
   TextField,
   Tooltip,
@@ -16,33 +15,16 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
-const data = [
-  { id: 1, name: "Jon", description: "Description of thing" },
-  { id: 2, name: "Cersei", description: "Description of thing" },
-  { id: 3, name: "Jaime", description: "Description of thing" },
-  { id: 4, name: "Arya", description: "Description of thing" },
-  { id: 5, name: "Daenerys", description: "Description of thing" },
-  { id: 6, name: "Melisandre", description: "Description of thing" },
-  { id: 7, name: "Ferrara", description: "Description of thing" },
-  { id: 8, name: "Rossini", description: "Description of thing" },
-  { id: 9, name: "Harvey", description: "Description of thing" },
-];
-const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-const validateAge = (age) => age >= 18 && age <= 50;
+import {
+  validateAge,
+  validateEmail,
+  validateRequired,
+} from "../../utils/utils";
+import { categories as data } from "../../data/data";
 
 const Categories = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
   const getCommonEditTextFieldProps = useCallback(
@@ -125,9 +107,7 @@ const Categories = () => {
 
   const handleDeleteRow = useCallback(
     (row) => {
-      if (
-        !confirm(`Are you sure you want to delete ${row.getValue("name")}`)
-      ) {
+      if (!confirm(`Are you sure you want to delete ${row.getValue("name")}`)) {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render

@@ -15,7 +15,6 @@
   -webkit-text-size-adjust: 100%;
 }
 
-
 a {
   font-weight: 500;
   color: #646cff;
@@ -63,10 +62,9 @@ button:focus-visible {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  padding-left: 2rem;
 }
 
-@media(max-width: 320px) {
+@media (max-width: 320px) {
   .flex {
     display: flex;
     flex-direction: column;

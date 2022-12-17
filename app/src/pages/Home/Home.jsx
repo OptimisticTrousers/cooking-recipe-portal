@@ -1,8 +1,8 @@
-import styles from "./index.module.css";
+import styles from "./Home.module.css";
 import CSSModules from "react-css-modules";
 import { Link } from "react-router-dom";
 
-const Hero = () => {
+const Home = () => {
   return (
     <div styleName="home">
       <div styleName="home__container">
@@ -22,7 +22,7 @@ const Hero = () => {
   );
 };
 
-export default CSSModules(Hero, styles, {
+export default CSSModules(Home, styles, {
   allowMultiple: true,
   handleNotFoundStyleName: "log",
 });
