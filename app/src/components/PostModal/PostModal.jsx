@@ -16,18 +16,12 @@ import {
   ModalCloseButton,
   Box,
 } from "@chakra-ui/react";
-import { createEditor } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const PostModal = ({ isOpen, onClose }) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
-
-  const [editor] = useState(() => withReact(createEditor()));
 
   return (
     <ChakraProvider>

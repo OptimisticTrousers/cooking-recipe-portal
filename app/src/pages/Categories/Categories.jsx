@@ -1,68 +1,133 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CSSModules from "react-css-modules";
 import styles from "./Categories.module.css";
 import useFetch from "../../hooks/useFetch";
 import { Link } from "react-router-dom";
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid } from "@mui/x-data-grid";
 import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
-import Overlay from "../../components/Overlay/Overlay";
+import MaterialReactTable from 'material-react-table';
 
-
-const columns  = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
+const data = [
   {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 90,
+    name: {
+      firstName: "John",
+
+      lastName: "Doe",
+    },
+
+    address: "261 Erdman Ford",
+
+    city: "East Daphne",
+
+    state: "Kentucky",
   },
+
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    name: {
+      firstName: "Jane",
+
+      lastName: "Doe",
+    },
+
+    address: "769 Dominic Grove",
+
+    city: "Columbus",
+
+    state: "Ohio",
+  },
+
+  {
+    name: {
+      firstName: "Joe",
+
+      lastName: "Doe",
+    },
+
+    address: "566 Brakus Inlet",
+
+    city: "South Linda",
+
+    state: "West Virginia",
+  },
+
+  {
+    name: {
+      firstName: "Kevin",
+
+      lastName: "Vandy",
+    },
+
+    address: "722 Emie Stream",
+
+    city: "Lincoln",
+
+    state: "Nebraska",
+  },
+
+  {
+    name: {
+      firstName: "Joshua",
+
+      lastName: "Rolluffs",
+    },
+
+    address: "32188 Larkin Turnpike",
+
+    city: "Charleston",
+
+    state: "South Carolina",
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
-
-const Categories= () => {
+const Categories = () => {
   // const {loading, error, value} = useFetch("../../data/data.json", {});
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const openModal = () => {
-    onOpen();
-  };
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "name.firstName", //access nested data with dot notation
+
+        header: "First Name",
+      },
+
+      {
+        accessorKey: "name.lastName",
+
+        header: "Last Name",
+      },
+
+      {
+        accessorKey: "address", //normal accessorKey
+
+        header: "Address",
+      },
+
+      {
+        accessorKey: "city",
+
+        header: "City",
+      },
+
+      {
+        accessorKey: "state",
+
+        header: "State",
+      },
+    ],
+    []
+  );
 
   return (
-   <div style={{ height: 400, width: '100%' }}>
-      <button className="button is-primary mb-4 mt-4" onClick={openModal}>Create Category</button>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
+    <div style={{ height: 400, width: "100%" }}>
+      <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
+        Create Category
+      </button>
+      <MaterialReactTable columns={columns} data={data} />
       <CategoryModal isOpen={isOpen} onClose={onClose} />
-    </div> 
+    </div>
   );
 };
 

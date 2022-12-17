@@ -20,10 +20,12 @@
     "date-fns": "^2.29.3",
     "framer-motion": "^7.10.0",
     "html-react-parser": "^3.0.4",
+    "material-react-table": "^1.4.3",
     "react": "^18.2.0",
     "react-css-modules": "^4.7.11",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.4.5"
   },
   "devDependencies": {
