@@ -7,7 +7,7 @@ const Home = () => {
     <div styleName="home">
       <div styleName="home__container">
         <div styleName="home__text">
-          <h1 styleName="home__title">Hello there!</h1>
+          <h1>Hello there!</h1>
           <p styleName="home__description">
             We're here to help you cook delicious meals with less stress and
             more joy. We offer recipes and cooking advice for home cooks, by

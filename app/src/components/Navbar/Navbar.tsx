@@ -23,8 +23,8 @@ const Navbar = () => {
           </Typography>
         </Link>
         <div className="flex">
-          {navItems.map((item) => (
-            <Link to={`/${item.toLowerCase()}`} className="button is-light m-2">
+          {navItems.map((item, index) => (
+            <Link to={`/${item.toLowerCase()}`} className="button is-light m-2" key={index}>
               {item}
             </Link>
           ))}
