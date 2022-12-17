@@ -1,13 +1,23 @@
-import React, { useEffect, useMemo, useState } from "react";
-import CSSModules from "react-css-modules";
-import styles from "./Categories.module.css";
-import useFetch from "../../hooks/useFetch";
-import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import CategoryModal from "../../components/CategoryModal/CategoryModal";
-import { Button, useDisclosure } from "@chakra-ui/react";
+import React, { useCallback, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
-
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  Stack,
+  TextField,
+  Tooltip,
+} from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import CategoryModal from "../../components/CategoryModal/CategoryModal";
+import { useDisclosure } from "@chakra-ui/react";
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Link } from "react-router-dom";
 const data = [
   { id: 1, name: "Jon", description: "Description of thing" },
   { id: 2, name: "Cersei", description: "Description of thing" },
@@ -19,55 +29,201 @@ const data = [
   { id: 8, name: "Rossini", description: "Description of thing" },
   { id: 9, name: "Harvey", description: "Description of thing" },
 ];
+const validateRequired = (value) => !!value.length;
+const validateEmail = (email) =>
+  !!email.length &&
+  email
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+const validateAge = (age) => age >= 18 && age <= 50;
 
 const Categories = () => {
-  // const {loading, error, value} = useFetch("../../data/data.json", {});
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [tableData, setTableData] = useState(() => data);
+  const [validationErrors, setValidationErrors] = useState({});
+  const getCommonEditTextFieldProps = useCallback(
+    (cell) => {
+      return {
+        error: !!validationErrors[cell.id],
+        helperText: validationErrors[cell.id],
+        onBlur: (event) => {
+          const isValid =
+            cell.column.id === "email"
+              ? validateEmail(event.target.value)
+              : cell.column.id === "age"
+              ? validateAge(+event.target.value)
+              : validateRequired(event.target.value);
+          if (!isValid) {
+            //set validation error for cell if invalid
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: `${cell.column.columnDef.header} is required`,
+            });
+          } else {
+            //remove validation error for cell if valid
+            delete validationErrors[cell.id];
+            setValidationErrors({
+              ...validationErrors,
+            });
+          }
+        },
+      };
+    },
+    [validationErrors]
+  );
   const columns = useMemo(
     () => [
       {
-        accessorKey: "name", //access nested data with dot notation
-
-        header: "Name",
+        accessorKey: "id",
+        header: "ID",
+        enableColumnOrdering: false,
+        enableEditing: false, //disable editing on this column
+        enableSorting: false,
+        size: 80,
       },
-
+      {
+        accessorKey: "name",
+        header: "Name",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
       {
         accessorKey: "description",
-
         header: "Description",
-      },
-      {
-        accessorKey: "id",
-        header: "Update",
-        Cell: ({ cell }) => (
-            <button className="button is-warning">Update</button>
-        ),
-      },
-      {
-        accessorKey: "id",
-        header: "Delete",
-        Cell: ({ cell }) => (
-            <button className="button is-danger">Delete</button>
-        ),
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
       },
     ],
-    []
+    [getCommonEditTextFieldProps]
+  );
+
+  const handleCreateNewRow = (values) => {
+    tableData.push(values);
+    setTableData([...tableData]);
+  };
+
+  const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
+    if (!Object.keys(validationErrors).length) {
+      tableData[row.index] = values;
+      //send/receive api updates here, then refetch or update local table data for re-render
+      setTableData([...tableData]);
+      exitEditingMode(); //required to exit editing mode and close modal
+    }
+  };
+
+  const handleCancelRowEdits = () => {
+    setValidationErrors({});
+  };
+
+  const handleDeleteRow = useCallback(
+    (row) => {
+      if (
+        !confirm(`Are you sure you want to delete ${row.getValue("name")}`)
+      ) {
+        return;
+      }
+      //send api delete request here, then refetch or update local table data for re-render
+      tableData.splice(row.index, 1);
+      setTableData([...tableData]);
+    },
+    [tableData]
   );
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
-        Create Category
-      </button>
-      <MaterialReactTable columns={columns} data={data} />
+    <Box mt={4}>
+      <MaterialReactTable
+        displayColumnDefOptions={{
+          "mrt-row-actions": {
+            size: 120,
+          },
+        }}
+        columns={columns}
+        data={tableData}
+        editingMode="modal" //default
+        enableColumnOrdering
+        enableEditing
+        onEditingRowSave={handleSaveRowEdits}
+        onEditingRowCancel={handleCancelRowEdits}
+        renderRowActions={({ row, table }) => (
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <Tooltip arrow placement="left" title="Edit">
+              <IconButton onClick={() => table.setEditingRow(row)}>
+                <Edit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow placement="right" title="Delete">
+              <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+        renderTopToolbarCustomActions={() => (
+          <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
+            Create Category
+          </button>
+        )}
+      />
       <CategoryModal isOpen={isOpen} onClose={onClose} />
-    </div>
+    </Box>
   );
 };
 
-export default CSSModules(Categories, styles, {
-  allowMultiple: true,
-  handleNotFoundStyleName: "log",
-});
+//Categories of creating a mui dialog modal for creating new rows
+export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
+  const [values, setValues] = useState(() =>
+    columns.reduce((acc, column) => {
+      acc[column.accessorKey ?? ""] = "";
+      return acc;
+    }, {})
+  );
+
+  const handleSubmit = () => {
+    //put your validation logic here
+    onSubmit(values);
+    onClose();
+  };
+
+  return (
+    <Dialog open={open}>
+      <DialogTitle textAlign="center">Create New Account</DialogTitle>
+      <DialogContent>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <Stack
+            sx={{
+              width: "100%",
+              minWidth: { xs: "300px", sm: "360px", md: "400px" },
+              gap: "1.5rem",
+            }}
+          >
+            {columns.map((column) => (
+              <TextField
+                key={column.accessorKey}
+                label={column.header}
+                name={column.accessorKey}
+                onChange={(e) =>
+                  setValues({ ...values, [e.target.name]: e.target.value })
+                }
+              />
+            ))}
+          </Stack>
+        </form>
+      </DialogContent>
+      <DialogActions sx={{ p: "1.25rem" }}>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button color="secondary" onClick={handleSubmit} variant="contained">
+          Create New Account
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export default Categories;
