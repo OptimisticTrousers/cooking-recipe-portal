@@ -1,54 +1,52 @@
-import React from "react";
-import "bulma/css/bulma.min.css";
+import * as React from "react";
+import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { Stack, ListItem } from "@mui/material";
+import { Flex } from "@chakra-ui/react";
 
+const drawerWidth = 240;
+const navItems = ["Posts", "Categories"];
 const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
   return (
-    <nav className="navbar" role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
-        <a className="navbar-item" href="https://bulma.io">
-          <img
-            src="https://bulma.io/images/bulma-logo.png"
-            width="112"
-            height="28"
-          />
-        </a>
-
-        <a
-          role="button"
-          className="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <div id="navbarBasicExample" className="navbar-menu">
-        <div className="navbar-start">
-          <Link to="/" className="navbar-item">
-            Home
-          </Link>
-        </div>
-        
-
-        <div className="navbar-end">
-          <div className="navbar-item">
-            <div className="buttons">
-              <Link to="/posts" className="button is-light">
-                Posts
-              </Link>
-              <Link to="/categories" className="button is-light">
-                Categories 
-              </Link>
-            </div>
-          </div>
+    <AppBar component="nav">
+      <div className="flex">
+        <Link to="/">
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, textAlign: { xs: "center", sm: "left" }, color: "#fff"}}
+          >
+            HOME
+          </Typography>
+        </Link>
+        <div className="flex">
+          {navItems.map((item) => (
+            <Link to={`/${item.toLowerCase()}`} className="button is-light m-2">
+              {item}
+            </Link>
+          ))}
         </div>
       </div>
-    </nav>
+    </AppBar>
   );
 };
 
