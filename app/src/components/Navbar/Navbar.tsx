@@ -17,15 +17,9 @@ import { Link } from "react-router-dom";
 import { Stack, ListItem } from "@mui/material";
 import { Flex } from "@chakra-ui/react";
 
-const drawerWidth = 240;
 const navItems = ["Posts", "Categories"];
+
 const Navbar = () => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
-
   return (
     <AppBar component="nav">
       <div className="flex">

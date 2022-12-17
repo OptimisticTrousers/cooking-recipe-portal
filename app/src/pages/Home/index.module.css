@@ -1,4 +1,4 @@
-.hero {
+.home {
   margin-top: 6rem;
   background-image: url(../../assets/food.webp);
   background-size: cover;
@@ -10,7 +10,7 @@
   text-align: center;
 }
 
-.hero__container {
+.home__container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,7 +18,7 @@
   gap: 16px;
 }
 
-.hero__text {
+.home__text {
   max-width: 28rem;
   padding: 3rem;
   border-radius: 4px;
@@ -26,7 +26,7 @@
   color: black;
 }
 
-.hero__description {
+.home__description {
   margin-top: 0.5rem;
   text-align: center;
 }
