@@ -18,6 +18,7 @@ import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
+import PostModal from "../../components/PostModal/PostModal";
 const data = [
   {
     id: 1,
@@ -247,7 +248,7 @@ const Posts = () => {
         }}
         renderTopToolbarCustomActions={() => (
           <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
-            Create Category
+            Create Post
           </button>
         )}
       />
@@ -257,7 +258,7 @@ const Posts = () => {
         onClose={() => setCreateModalOpen(false)}
         onSubmit={handleCreateNewRow}
       /> */}
-      <CategoryModal isOpen={isOpen} onClose={onClose} />
+      <PostModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };
