@@ -24,7 +24,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const CategoryModal = ({ isOpen, onClose, overlay }) => {
+const CategoryModal = ({ isOpen, onClose }) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
@@ -38,7 +38,6 @@ const CategoryModal = ({ isOpen, onClose, overlay }) => {
         isOpen={isOpen}
         onClose={onClose}
       >
-        {overlay}
         <ModalOverlay />
         <ModalContent maxW="800">
           <ModalHeader>Create a category!</ModalHeader>

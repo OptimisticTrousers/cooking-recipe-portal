@@ -23,7 +23,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const PostModal = ({ isOpen, onClose, overlay }) => {
+const PostModal = ({ isOpen, onClose }) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
@@ -37,7 +37,6 @@ const PostModal = ({ isOpen, onClose, overlay }) => {
         isOpen={isOpen}
         onClose={onClose}
       >
-        {overlay}
         <ModalOverlay />
         <ModalContent maxW="800">
           <ModalHeader>Create a post!</ModalHeader>
