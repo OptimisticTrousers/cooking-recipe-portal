@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
-import Post from "../../components/Post/Post";
+import React, { useEffect, useState } from "react";
 import CSSModules from "react-css-modules";
 import styles from "./Categories.module.css";
 import useFetch from "../../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { DataGrid } from '@mui/x-data-grid'
+import CategoryModal from "../../components/CategoryModal/CategoryModal";
+import { useDisclosure } from "@chakra-ui/react";
+import Overlay from "../../components/Overlay/Overlay";
 
 
 const columns  = [
@@ -43,9 +45,15 @@ const rows = [
 const Categories= () => {
   // const {loading, error, value} = useFetch("../../data/data.json", {});
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const openModal = () => {
+    onOpen();
+  };
+
   return (
    <div style={{ height: 400, width: '100%' }}>
-      <button className="button is-primary">Create Category</button>
+      <button className="button is-primary mb-4 mt-4" onClick={openModal}>Create Category</button>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -53,6 +61,7 @@ const Categories= () => {
         rowsPerPageOptions={[5]}
         checkboxSelection
       />
+      <CategoryModal isOpen={isOpen} onClose={onClose} />
     </div> 
   );
 };

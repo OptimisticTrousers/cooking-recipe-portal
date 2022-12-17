@@ -1,10 +1,21 @@
-import React, { useEffect } from "react";
-import Post from "../../components/Post/Post";
+import React, { useEffect, useState } from "react";
 import CSSModules from "react-css-modules";
 import styles from "./Posts.module.css";
 import useFetch from "../../hooks/useFetch";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
+import { useDisclosure } from "@chakra-ui/react";
+import PostModal from "../../components/PostModal/PostModal";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+import Overlay from "../../components/Overlay/Overlay";
 
 const renderLink = (params) => {
   return <Link to={`/posts/${params.row.id}`}>Link</Link>;
@@ -57,18 +68,30 @@ const rows = [
 
 const Posts = () => {
   // const {loading, error, value} = useFetch("../../data/data.json", {});
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = useState(<Overlay />);
+
+  const openModal = () => {
+    setOverlay((prevValue) => !prevValue);
+    onOpen();
+  };
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <button className="button is-primary">Create Post</button>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      />
-    </div>
+    <>
+      <div style={{ height: 400, width: "100%" }}>
+        <button className="button is-primary mb-4 mt-4" onClick={openModal}>
+          Create Post
+        </button>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+        />
+        <PostModal isOpen={isOpen} onClose={onClose} />
+      </div>
+    </>
   );
 };
 
