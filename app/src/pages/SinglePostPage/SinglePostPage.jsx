@@ -75,7 +75,7 @@ const SinglePostPage = () => {
         <BsCalendar3 />
         <Date dateString={createdAt} />
         by
-        <p styleName="post__author">{author}</p>
+        <span styleName="post__author">{author}</span>
       </p>
       <section styleName={`post__description`}>{parse(content)}</section>
     </article>
