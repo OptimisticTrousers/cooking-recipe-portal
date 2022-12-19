@@ -14,7 +14,16 @@ mysqlConnect.query("SELECT * from categories",(err,row,field)=>{
 })
 })
 
-}).post((req, res) => {
+}).post((req, res, next) => {
+    const { name, description } = req.body;
+    const category = { name, description};
+    mysqlConnect.query("INSERT INTO categories SET?", category, (err, results) => {
+      if (!err) {
+        res.status(201).send(`category added with ID:${results.insertId}`);
+      } else {
+        console.log(err);
+      }
+    });
 
 }).put((req, res) => {
 

@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 
-const recipesRouter = require("./routes/recipe");
+const recipesRouter = require("./routes/recipes");
 const categoriesRouter = require("./routes/categories");
 
 app.use(bodyParser.json());
