@@ -35,6 +35,7 @@ import {
 } from "@chakra-ui/react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { v4 as uuidv4 } from "uuid";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -123,19 +124,16 @@ const Posts = () => {
   );
 
   const handleCreateNewRow = async (values) => {
-      try {
-        const { data } = await axios.post(
-          `${apiDomain()}/api/recipies/post`,
-          {
-            method: "POST",
-            mode: "cors",
-            body: values
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const { data } = await axios.post(`${apiDomain()}/api/recipies/post`, {
+        method: "POST",
+        mode: "cors",
+        body: {...values, createdAt: Date.now(), id: uuidv4()},
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -150,7 +148,7 @@ const Posts = () => {
           {
             method: "POST",
             mode: "cors",
-            body: values
+            body: values,
           }
         );
         console.log(data);
@@ -248,6 +246,5 @@ const Posts = () => {
     </Box>
   );
 };
-
 
 export default Posts;

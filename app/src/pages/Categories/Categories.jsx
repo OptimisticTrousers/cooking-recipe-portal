@@ -22,6 +22,7 @@ import {
   validateRequired,
 } from "../../utils/utils";
 import { categories as data } from "../../data/data";
+import { v4 as uuidv4 } from "uuid";
 
 const Categories = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -88,21 +89,17 @@ const Categories = () => {
     [getCommonEditTextFieldProps]
   );
 
-
   const handleCreateNewRow = async (values) => {
-      try {
-        const { data } = await axios.post(
-          `${apiDomain()}/api/recipies/post`,
-          {
-            method: "POST",
-            mode: "cors",
-            body: values
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const { data } = await axios.post(`${apiDomain()}/api/recipies/post`, {
+        method: "POST",
+        mode: "cors",
+        body: {...values, createdAt: Date.now(), id: uuidv4()},
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -117,7 +114,7 @@ const Categories = () => {
           {
             method: "POST",
             mode: "cors",
-            body: values
+            body: values,
           }
         );
         console.log(data);
