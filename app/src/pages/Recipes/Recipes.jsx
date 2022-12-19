@@ -42,7 +42,7 @@ const Posts = () => {
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
 
-  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipies`);
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
   console.log(loading, error, value);
 
@@ -125,7 +125,7 @@ const Posts = () => {
 
   const handleCreateNewRow = async (values) => {
     try {
-      const { data } = await axios.post(`${apiDomain()}/api/recipies/post`, {
+      const { data } = await axios.post(`${apiDomain()}/api/recipes/post`, {
         method: "POST",
         mode: "cors",
         body: {...values, createdAt: Date.now(), id: uuidv4()},
@@ -144,7 +144,7 @@ const Posts = () => {
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipies/${row.id}`,
+          `${apiDomain()}/api/recipes/${row.id}`,
           {
             method: "POST",
             mode: "cors",
@@ -174,7 +174,7 @@ const Posts = () => {
       //send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/recipies/${row.id}`,
+          `${apiDomain()}/api/recipes/${row.id}`,
           {
             method: "POST",
             mode: "cors",

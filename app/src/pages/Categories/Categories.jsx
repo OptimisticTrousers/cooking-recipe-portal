@@ -29,6 +29,11 @@ const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
+
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
+
+  console.log(loading, error, value);
+
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
       return {
@@ -91,7 +96,7 @@ const Categories = () => {
 
   const handleCreateNewRow = async (values) => {
     try {
-      const { data } = await axios.post(`${apiDomain()}/api/recipies/post`, {
+      const { data } = await axios.post(`${apiDomain()}/api/categories/post`, {
         method: "POST",
         mode: "cors",
         body: {...values, createdAt: Date.now(), id: uuidv4()},
@@ -110,7 +115,7 @@ const Categories = () => {
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipies/${row.id}`,
+          `${apiDomain()}/api/categories/${row.id}`,
           {
             method: "POST",
             mode: "cors",
@@ -140,7 +145,7 @@ const Categories = () => {
       //send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/recipies/${row.id}`,
+          `${apiDomain()}/api/categories/${row.id}`,
           {
             method: "POST",
             mode: "cors",
