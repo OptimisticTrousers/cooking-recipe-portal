@@ -137,6 +137,7 @@ const Posts = () => {
   );
 
   const handleCreateNewRow = async (values) => {
+    console.log(values)
     try {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
         method: "POST",
