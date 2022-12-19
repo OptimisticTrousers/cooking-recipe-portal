@@ -39,10 +39,14 @@ import { v4 as uuidv4 } from "uuid";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState(() => data);
+  const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
+
+  useEffect(() => {
+    setTableData(value);
+  }, [value]);
 
   console.log(loading, error, value);
 
@@ -125,10 +129,10 @@ const Posts = () => {
 
   const handleCreateNewRow = async (values) => {
     try {
-      const { data } = await axios.post(`${apiDomain()}/api/recipes/post`, {
+      const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
         method: "POST",
         mode: "cors",
-        body: {...values, createdAt: Date.now(), id: uuidv4()},
+        body: { ...values, createdAt: Date.now(), id: uuidv4() },
       });
       console.log(data);
     } catch (err) {
