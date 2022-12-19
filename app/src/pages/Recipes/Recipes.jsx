@@ -36,6 +36,7 @@ import {
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -116,6 +117,14 @@ const Posts = () => {
         }),
       },
       {
+        accessorKey: "category",
+        header: "Category",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
         accessorKey: "createdAt",
         header: "Created At",
         size: 80,
@@ -132,7 +141,7 @@ const Posts = () => {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
         method: "POST",
         mode: "cors",
-        body: { ...values, createdAt: Date.now(), id: uuidv4() },
+        body: values,
       });
       console.log(data);
     } catch (err) {
