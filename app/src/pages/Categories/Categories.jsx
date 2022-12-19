@@ -25,6 +25,7 @@ import { categories as data } from "../../data/data";
 
 const Categories = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
   const getCommonEditTextFieldProps = useCallback(
@@ -87,7 +88,21 @@ const Categories = () => {
     [getCommonEditTextFieldProps]
   );
 
-  const handleCreateNewRow = (values) => {
+
+  const handleCreateNewRow = async (values) => {
+      try {
+        const { data } = await axios.post(
+          `${apiDomain()}/api/recipies/post`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: values
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -96,6 +111,19 @@ const Categories = () => {
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.put(
+          `${apiDomain()}/api/recipies/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: values
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       setTableData([...tableData]);
       exitEditingMode(); //required to exit editing mode and close modal
     }
@@ -106,17 +134,30 @@ const Categories = () => {
   };
 
   const handleDeleteRow = useCallback(
-    (row) => {
-      if (!confirm(`Are you sure you want to delete ${row.getValue("name")}`)) {
+    async (row) => {
+      if (
+        !confirm(`Are you sure you want to delete ${row.getValue("title")}`)
+      ) {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.delete(
+          `${apiDomain()}/api/recipies/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
     [tableData]
   );
-
   return (
     <Box mt={16}>
       <MaterialReactTable
@@ -147,12 +188,20 @@ const Categories = () => {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
+          <button
+            className="button is-primary mb-4 mt-4"
+            onClick={() => setCreateModalOpen(true)}
+          >
             Create Category
           </button>
         )}
       />
-      <CategoryModal isOpen={isOpen} onClose={onClose} />
+      <CategoryModal
+        columns={columns}
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSubmit={handleCreateNewRow}
+      />
     </Box>
   );
 };

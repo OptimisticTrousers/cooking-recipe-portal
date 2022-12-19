@@ -1,8 +1,16 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import {
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
+  MenuItem,
+  Stack,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
@@ -11,18 +19,32 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import PostModal from "../../components/PostModal/PostModal";
 import "bulma/css/bulma.min.css";
-import { posts as data } from "../../data/data"; 
+import { posts as data } from "../../data/data";
 import {
+  apiDomain,
   validateAge,
   validateEmail,
   validateRequired,
 } from "../../utils/utils";
+import useFetch from "../../hooks/useFetch";
+import {
+  ChakraProvider,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 const Posts = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
+
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipies`);
+
+  console.log(loading, error, value);
+
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
       return {
@@ -100,7 +122,20 @@ const Posts = () => {
     [getCommonEditTextFieldProps]
   );
 
-  const handleCreateNewRow = (values) => {
+  const handleCreateNewRow = async (values) => {
+      try {
+        const { data } = await axios.post(
+          `${apiDomain()}/api/recipies/post`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: values
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -109,6 +144,19 @@ const Posts = () => {
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.put(
+          `${apiDomain()}/api/recipies/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: values
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       setTableData([...tableData]);
       exitEditingMode(); //required to exit editing mode and close modal
     }
@@ -119,13 +167,25 @@ const Posts = () => {
   };
 
   const handleDeleteRow = useCallback(
-    (row) => {
+    async (row) => {
       if (
         !confirm(`Are you sure you want to delete ${row.getValue("title")}`)
       ) {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.delete(
+          `${apiDomain()}/api/recipies/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
@@ -133,7 +193,7 @@ const Posts = () => {
   );
 
   return (
-    <Box mt={16}>
+    <Box mt={16} minHeight="100%">
       <MaterialReactTable
         displayColumnDefOptions={{
           "mrt-row-actions": {
@@ -171,14 +231,23 @@ const Posts = () => {
           );
         }}
         renderTopToolbarCustomActions={() => (
-          <button className="button is-primary mb-4 mt-4" onClick={onOpen}>
-            Create Post
+          <button
+            className="button is-primary mb-4 mt-4"
+            onClick={() => setCreateModalOpen(true)}
+          >
+            Create Recipe
           </button>
         )}
       />
-      <PostModal isOpen={isOpen} onClose={onClose} />
+      <PostModal
+        columns={columns}
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onSubmit={handleCreateNewRow}
+      />
     </Box>
   );
 };
+
 
 export default Posts;
