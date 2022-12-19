@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import Posts from "./pages/Posts/Posts";
+import Recipes from "./pages/Recipes/Recipes";
 import SinglePostPage from "./pages/SinglePostPage/SinglePostPage";
 import Categories from "./pages/Categories/Categories";
 
@@ -14,8 +14,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="posts">
-            <Route index element={<Posts />} />
+          <Route path="recipes">
+            <Route index element={<Recipes />} />
             <Route path=":postId" element={<SinglePostPage />} />
           </Route>
           <Route path="categories" element={<Categories />} />
