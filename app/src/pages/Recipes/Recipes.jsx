@@ -40,16 +40,16 @@ import axios from "axios";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
 
-  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
+  // const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
-  useEffect(() => {
-    setTableData(value);
-  }, [value]);
+  // useEffect(() => {
+  //   setTableData(value);
+  // }, [value]);
 
-  console.log(loading, error, value);
+  // console.log(loading, error, value);
 
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
@@ -137,17 +137,17 @@ const Posts = () => {
   );
 
   const handleCreateNewRow = async (values) => {
-    console.log(values)
-    try {
-      const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
-        method: "POST",
-        mode: "cors",
-        body: values,
-      });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
+    // console.log(values)
+    // try {
+    //   const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
+    //     method: "POST",
+    //     mode: "cors",
+    //     body: values,
+    //   });
+    //   console.log(data);
+    // } catch (err) {
+    //   console.log(err);
+    // }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -156,19 +156,19 @@ const Posts = () => {
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
-      try {
-        const { data } = await axios.put(
-          `${apiDomain()}/api/recipes/${row.id}`,
-          {
-            method: "POST",
-            mode: "cors",
-            body: values,
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   const { data } = await axios.put(
+      //     `${apiDomain()}/api/recipes/${row.id}`,
+      //     {
+      //       method: "POST",
+      //       mode: "cors",
+      //       body: values,
+      //     }
+      //   );
+      //   console.log(data);
+      // } catch (err) {
+      //   console.log(err);
+      // }
       setTableData([...tableData]);
       exitEditingMode(); //required to exit editing mode and close modal
     }
@@ -186,18 +186,18 @@ const Posts = () => {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render
-      try {
-        const { data } = await axios.delete(
-          `${apiDomain()}/api/recipes/${row.id}`,
-          {
-            method: "POST",
-            mode: "cors",
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   const { data } = await axios.delete(
+      //     `${apiDomain()}/api/recipes/${row.id}`,
+      //     {
+      //       method: "POST",
+      //       mode: "cors",
+      //     }
+      //   );
+      //   console.log(data);
+      // } catch (err) {
+      //   console.log(err);
+      // }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
@@ -233,7 +233,7 @@ const Posts = () => {
                 </IconButton>
               </Tooltip>
               <Tooltip arrow placement="right" title="View">
-                <Link to={`/posts/${row.original.id}`}>
+                <Link to={`/recipes/${row.original.id}`}>
                   <IconButton color="primary">
                     <OpenInNewIcon />
                   </IconButton>

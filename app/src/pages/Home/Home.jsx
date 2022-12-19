@@ -14,7 +14,7 @@ const Home = () => {
             home cooks.
           </p>
         </div>
-        <Link to="/posts">
+        <Link to="/recipes">
           <button className="btn btn-primary">Get Started</button>
         </Link>
       </div>

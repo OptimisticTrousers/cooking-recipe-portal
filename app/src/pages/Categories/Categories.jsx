@@ -30,9 +30,9 @@ const Categories = () => {
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
 
-  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
+  // const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
-  console.log(loading, error, value);
+  // console.log(loading, error, value);
 
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
@@ -95,16 +95,16 @@ const Categories = () => {
   );
 
   const handleCreateNewRow = async (values) => {
-    try {
-      const { data } = await axios.post(`${apiDomain()}/api/categories/post`, {
-        method: "POST",
-        mode: "cors",
-        body: {...values, createdAt: Date.now(), id: uuidv4()},
-      });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
+    // try {
+    //   const { data } = await axios.post(`${apiDomain()}/api/categories/post`, {
+    //     method: "POST",
+    //     mode: "cors",
+    //     body: {...values, createdAt: Date.now(), id: uuidv4()},
+    //   });
+    //   console.log(data);
+    // } catch (err) {
+    //   console.log(err);
+    // }
     tableData.push(values);
     setTableData([...tableData]);
   };
@@ -113,19 +113,19 @@ const Categories = () => {
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
-      try {
-        const { data } = await axios.put(
-          `${apiDomain()}/api/categories/${row.id}`,
-          {
-            method: "POST",
-            mode: "cors",
-            body: values,
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   const { data } = await axios.put(
+      //     `${apiDomain()}/api/categories/${row.id}`,
+      //     {
+      //       method: "POST",
+      //       mode: "cors",
+      //       body: values,
+      //     }
+      //   );
+      //   console.log(data);
+      // } catch (err) {
+      //   console.log(err);
+      // }
       setTableData([...tableData]);
       exitEditingMode(); //required to exit editing mode and close modal
     }
@@ -138,23 +138,23 @@ const Categories = () => {
   const handleDeleteRow = useCallback(
     async (row) => {
       if (
-        !confirm(`Are you sure you want to delete ${row.getValue("title")}`)
+        !confirm(`Are you sure you want to delete ${row.getValue("name")}`)
       ) {
         return;
       }
       //send api delete request here, then refetch or update local table data for re-render
-      try {
-        const { data } = await axios.delete(
-          `${apiDomain()}/api/categories/${row.id}`,
-          {
-            method: "POST",
-            mode: "cors",
-          }
-        );
-        console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
+      // try {
+      //   const { data } = await axios.delete(
+      //     `${apiDomain()}/api/categories/${row.id}`,
+      //     {
+      //       method: "POST",
+      //       mode: "cors",
+      //     }
+      //   );
+      //   console.log(data);
+      // } catch (err) {
+      //   console.log(err);
+      // }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
