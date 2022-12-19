@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 
-const navItems = ["Posts", "Categories"];
+const navItems = ["Recipes", "Categories"];
 
 const Navbar = () => {
   return (
