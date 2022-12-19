@@ -15,9 +15,15 @@ Router.route("/")
     });
   })
   .post((req, res) => {
-    let createAt = new Date().toISOString().slice(0, 10);
-    const { title, author, content } = req.body;
-    const post = { title, author, content, createAt };
+    let createdAt = new Date().toISOString().slice(0, 10);
+    const post = {
+      title: req.body.title,
+      author: req.body.author,
+      content: req.body.content,
+      category: req.body.category,
+      createdAt,
+    };
+    console.log(post)
     mysqlConnect.query("INSERT INTO recipes SET?", post, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
