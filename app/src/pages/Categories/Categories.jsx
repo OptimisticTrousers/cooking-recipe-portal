@@ -33,51 +33,6 @@ const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
-  const getCommonEditTextFieldProps = useCallback(
-    (cell) => {
-      return {
-        error: !!validationErrors[cell.id],
-        helperText: validationErrors[cell.id],
-        onBlur: (event) => {
-          const isValid =
-            cell.column.id === "email"
-              ? validateEmail(event.target.value)
-              : cell.column.id === "age"
-              ? validateAge(+event.target.value)
-              : validateRequired(event.target.value);
-          if (!isValid) {
-            //set validation error for cell if invalid
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: `${cell.column.columnDef.header} is required`,
-            });
-          } else {
-            //remove validation error for cell if valid
-            delete validationErrors[cell.id];
-            setValidationErrors({
-              ...validationErrors,
-            });
-          }
-        },
-      };
-    },
-    [validationErrors]
-  );
-  const handleCreateNewRow = async (values) => {
-    values.original.categoryId = uuidv4();
-    values.original.createdAt = Date.now();
-    try {
-      const { data } = await axios.post(
-        `${apiDomain()}/api/categories`,
-        values.original
-      );
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-    tableData.push(values);
-    setTableData([...tableData]);
-  };
 
   const columns = useMemo(
     () => [
@@ -93,52 +48,60 @@ const Categories = () => {
         accessorKey: "categoryName",
         header: "Name",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "categoryDescription",
         header: "Description",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "createdAt",
         header: "Created At",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
     ],
-    [getCommonEditTextFieldProps]
+    []
   );
 
-  const [updateData, setUpdateData] = useState(() =>
+  const [currentRow, setCurrentRow] = useState(() =>
     columns.reduce((acc, column) => {
       acc[column.accessorKey ?? ""] = "";
       return acc;
     }, {})
   );
 
+  const currentRowData = currentRow.original;
+
+  const handleCreateNewRow = async (values) => {
+    values.categoryId = uuidv4();
+    values.createdAt = Date.now();
+    try {
+      const { data } = await axios.post(
+        `${apiDomain()}/api/categories`,
+        values
+      );
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+    tableData.push(values);
+    setTableData([...tableData]);
+  };
+
   const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
   useEffect(() => {
-    console.log(value);
     setTableData(value);
   }, [value]);
 
-  const handleSaveRowEdits = async () => {
+  const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[updateData.index] = updateData.original;
+      tableData[currentRow.index] = values;
       // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/categories/${updateData.original.categoryId}`,
-          updateData.original
+          `${apiDomain()}/api/categories/${values.categoryId}`,
+          values
         );
         console.log(data);
       } catch (err) {
@@ -196,7 +159,7 @@ const Categories = () => {
               <IconButton
                 onClick={() => {
                   setCreateModalOpen(true);
-                  setUpdateData(row);
+                  setCurrentRow({index: row.index, original: row.original});
                 }}
               >
                 <Edit />
@@ -223,7 +186,7 @@ const Categories = () => {
         open={createModalOpen}
         onClose={() => {
           setCreateModalOpen(false);
-          setUpdateData((prevData) => {
+          setCurrentRow((prevData) => {
             return {
               ...prevData,
               original: columns.reduce((acc, column) => {
@@ -234,12 +197,12 @@ const Categories = () => {
           });
         }}
         onSubmit={
-          updateData.original?.categoryId
+          currentRow.original?.categoryId
             ? handleSaveRowEdits
             : handleCreateNewRow
         }
-        updateData={updateData}
-        setUpdateData={setUpdateData}
+        currentRowData={currentRowData}
+        setCurrentRow={setCurrentRow}
       />
     </Box>
   );

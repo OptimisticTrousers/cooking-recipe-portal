@@ -41,13 +41,13 @@ const CategoryModal = ({
   columns,
   onClose,
   onSubmit,
-  updateData,
-  setUpdateData,
+  currentRowData,
+  setCurrentRow,
 }) => {
   const handleSubmit = (event) => {
     //put your validation logic here
 
-    onSubmit(updateData);
+    onSubmit(currentRowData);
     onClose();
   };
 
@@ -55,7 +55,7 @@ const CategoryModal = ({
     <Dialog open={open}>
       <form onSubmit={handleSubmit}>
         <DialogTitle textAlign="center">
-          {updateData.original?.categoryId
+          {currentRowData?.categoryId
             ? "Update Category"
             : "Create New Category"}
         </DialogTitle>
@@ -79,10 +79,9 @@ const CategoryModal = ({
                   label={column.header}
                   name={column.accessorKey}
                   required
-                  value={updateData.original?.[column.accessorKey]}
+                  value={currentRowData?.[column.accessorKey]}
                   onChange={(e) => {
-                    console.log(updateData.original);
-                    setUpdateData((prevUpdateData) => {
+                    setCurrentRow((prevUpdateData) => {
                       return {
                         ...prevUpdateData,
                         original: {
@@ -100,7 +99,7 @@ const CategoryModal = ({
         <DialogActions sx={{ p: "1.25rem" }}>
           <Button onClick={onClose}>Cancel</Button>
           <Button color="secondary" type="submit" variant="contained">
-            {updateData.original?.categoryId
+            {currentRowData?.categoryId
               ? "Update Recipe"
               : "Create New Recipe"}
           </Button>
