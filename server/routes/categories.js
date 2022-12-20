@@ -16,9 +16,9 @@ Router.route("/")
   })
   .post((req, res, next) => {
     const category = {
-      id: req.body.id,
-      name: req.body.name,
-      description: req.body.name,
+      categoryId: req.body.categoryId,
+      categoryName: req.body.categoryName,
+      categoryDescription: req.body.categoryDescription,
       createdAt: req.body.createdAt,
     };
     mysqlConnect.query(
@@ -32,17 +32,18 @@ Router.route("/")
         }
       }
     );
-  })
+  });
+
+Router.route("/:categoryId")
   .put((req, res) => {
-    const id = req.body.id;
+    const id = req.params.categoryId;
     const category = {
-      name: req.body.name,
-      author: req.body.description,
+      categoryName: req.body.categoryName,
+      categoryDescription: req.body.categoryDescription,
     };
-    console.log(category);
     mysqlConnect.query(
-      "UPDATE categories SET ? WHERE id = ?",
-      [post, id],
+      "UPDATE categories SET ? WHERE categoryId = ?",
+      [category, id],
       (err, results) => {
         if (!err) {
           res.send(`Recipe update with ID: ${id}`);
@@ -53,9 +54,9 @@ Router.route("/")
     );
   })
   .delete((req, res) => {
-    const id = req.params.id;
+    const id = req.params.categoryId;
     mysqlConnect.query(
-      "DELETE FROM categories WHERE id = ?",
+      "DELETE FROM categories WHERE categoryId = ?",
       id,
       (err, results) => {
         if (!err) {

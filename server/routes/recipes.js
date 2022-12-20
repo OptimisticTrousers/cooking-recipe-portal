@@ -16,11 +16,11 @@ Router.route("/")
   })
   .post((req, res) => {
     const post = {
-      id: req.body.id,
-      title: req.body.title,
-      author: req.body.author,
-      content: req.body.content,
-      category: req.body.category,
+      recipeId: req.body.id,
+      recipeTitle: req.body.title,
+      recipeAuthor: req.body.author,
+      recipeContent: req.body.content,
+      recipeCategory: req.body.category,
       createdAt: req.body.category,
     };
     console.log(post);

@@ -39,6 +39,8 @@ import "react-quill/dist/quill.snow.css";
 const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
   const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
+  console.log(value)
+
   const [values, setValues] = useState(
     () =>
       updateData ??
@@ -82,7 +84,7 @@ const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
                     <FormControl>
                       <FormLabel>Category</FormLabel>
                       <Select isRequired={true}>
-                        {value.map((category) => {
+                        {value?.map((category) => {
                           if (category.name === updateData.category) {
                             return (
                               <option value={category.name} selected={true}>
@@ -126,7 +128,7 @@ const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
                     key={column.accessorKey}
                     label={column.header}
                     name={column.accessorKey}
-                    value={updateData[accessorKey]}
+                    value={updateData[column.accessorKey]}
                     isRequired={true}
                     onChange={(e) =>
                       setValues({ ...values, [e.target.name]: e.target.value })

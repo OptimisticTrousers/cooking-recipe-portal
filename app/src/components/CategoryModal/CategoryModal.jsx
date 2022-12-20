@@ -36,28 +36,35 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 //example of creating a mui dialog modal for creating new rows
-const CategoryModal = ({ open, columns, onClose, onSubmit, updateData }) => {
-  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
-  const [values, setValues] = useState(() =>
-    updateData ?? columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ""] = "";
-      return acc;
-    }, {})
-  );
-
+const CategoryModal = ({
+  open,
+  columns,
+  onClose,
+  onSubmit,
+  updateData,
+  setUpdateData,
+}) => {
   const handleSubmit = () => {
     //put your validation logic here
-    if(!values.content) {
-      alert("Please enter content")
+
+    const emptyFields = Object.values(updateData.original).some(
+      (element) => element === ""
+    );
+    if (emptyFields) {
+      alert("Please enter all required data");
       return;
     }
-    onSubmit(values);
+    onSubmit(updateData);
     onClose();
   };
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Category</DialogTitle>
+      <DialogTitle textAlign="center">
+        {updateData.original?.categoryId
+          ? "Update Category"
+          : "Create New Category"}
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack
@@ -69,7 +76,7 @@ const CategoryModal = ({ open, columns, onClose, onSubmit, updateData }) => {
           >
             {columns.map((column) => {
               if (
-                column.accessorKey === "id" ||
+                column.accessorKey === "categoryId" ||
                 column.accessorKey === "createdAt"
               )
                 return;
@@ -78,11 +85,20 @@ const CategoryModal = ({ open, columns, onClose, onSubmit, updateData }) => {
                   key={column.accessorKey}
                   label={column.header}
                   name={column.accessorKey}
-                  value={updateData[accessorKey]}
-                  isRequired={true}
-                  onChange={(e) =>
-                    setValues({ ...values, [e.target.name]: e.target.value })
-                  }
+                  required
+                  value={updateData.original?.[column.accessorKey]}
+                  onChange={(e) => {
+                    console.log(updateData.original);
+                    setUpdateData((prevUpdateData) => {
+                      return {
+                        ...prevUpdateData,
+                        original: {
+                          ...prevUpdateData.original,
+                          [e.target.name]: e.target.value,
+                        },
+                      };
+                    });
+                  }}
                 />
               );
             })}
@@ -92,7 +108,9 @@ const CategoryModal = ({ open, columns, onClose, onSubmit, updateData }) => {
       <DialogActions sx={{ p: "1.25rem" }}>
         <Button onClick={onClose}>Cancel</Button>
         <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New Recipe
+          {updateData.original?.categoryId
+            ? "Update Recipe"
+            : "Create New Recipe"}
         </Button>
       </DialogActions>
     </Dialog>
