@@ -17,7 +17,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
-import PostModal from "../../components/PostModal/PostModal";
+import RecipeModal from "../../components/RecipeModal/RecipeModal";
 import "bulma/css/bulma.min.css";
 import { posts as data } from "../../data/data";
 import {
@@ -42,12 +42,9 @@ const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
+  const [updateData, setUpdateData] = useState({})
 
   // const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
-
-  // useEffect(() => {
-  //   setTableData(value);
-  // }, [value]);
 
   // console.log(loading, error, value);
 
@@ -137,6 +134,8 @@ const Posts = () => {
   );
 
   const handleCreateNewRow = async (values) => {
+    values.id = uuidv4();
+    values.createdAt = Date.now();
     // console.log(values)
     // try {
     //   const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
@@ -153,6 +152,7 @@ const Posts = () => {
   };
 
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
+    console.log(values)
     if (!Object.keys(validationErrors).length) {
       tableData[row.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
@@ -223,7 +223,10 @@ const Posts = () => {
           return (
             <Box sx={{ display: "flex", gap: "1rem" }}>
               <Tooltip arrow placement="left" title="Edit">
-                <IconButton onClick={() => table.setEditingRow(row)}>
+                <IconButton onClick={() => {
+                  setUpdateData(row);
+                  setCreateModalOpen(true)
+                }}>
                   <Edit />
                 </IconButton>
               </Tooltip>
@@ -251,11 +254,12 @@ const Posts = () => {
           </button>
         )}
       />
-      <PostModal
+      <RecipeModal
         columns={columns}
         open={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onSubmit={handleCreateNewRow}
+        onSubmit={updateData ? handleSaveRowEdits : handleCreateNewRow}
+        updateData={updateData}
       />
     </Box>
   );

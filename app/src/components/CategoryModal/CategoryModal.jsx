@@ -36,9 +36,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 //example of creating a mui dialog modal for creating new rows
-export const CategoryModal = ({ open, columns, onClose, onSubmit }) => {
+const CategoryModal = ({ open, columns, onClose, onSubmit, updateData }) => {
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
   const [values, setValues] = useState(() =>
-    columns.reduce((acc, column) => {
+    updateData ?? columns.reduce((acc, column) => {
       acc[column.accessorKey ?? ""] = "";
       return acc;
     }, {})
@@ -46,6 +47,10 @@ export const CategoryModal = ({ open, columns, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     //put your validation logic here
+    if(!values.content) {
+      alert("Please enter content")
+      return;
+    }
     onSubmit(values);
     onClose();
   };
@@ -73,6 +78,8 @@ export const CategoryModal = ({ open, columns, onClose, onSubmit }) => {
                   key={column.accessorKey}
                   label={column.header}
                   name={column.accessorKey}
+                  value={updateData[accessorKey]}
+                  isRequired={true}
                   onChange={(e) =>
                     setValues({ ...values, [e.target.name]: e.target.value })
                   }

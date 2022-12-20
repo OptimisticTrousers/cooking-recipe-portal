@@ -15,8 +15,12 @@ Router.route("/")
     });
   })
   .post((req, res, next) => {
-    const { name, description } = req.body;
-    const category = { name, description };
+    const category = {
+      id: req.body.id,
+      name: req.body.name,
+      description: req.body.name,
+      createdAt: req.body.createdAt,
+    };
     mysqlConnect.query(
       "INSERT INTO categories SET?",
       category,
@@ -29,7 +33,25 @@ Router.route("/")
       }
     );
   })
-  .put((req, res) => {})
+  .put((req, res) => {
+    const id = req.body.id;
+    const category = {
+      name: req.body.name,
+      author: req.body.description,
+    };
+    console.log(category);
+    mysqlConnect.query(
+      "UPDATE categories SET ? WHERE id = ?",
+      [post, id],
+      (err, results) => {
+        if (!err) {
+          res.send(`Recipe update with ID: ${id}`);
+        } else {
+          console.log(err);
+        }
+      }
+    );
+  })
   .delete((req, res) => {
     const id = req.params.id;
     mysqlConnect.query(

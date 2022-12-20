@@ -15,15 +15,15 @@ Router.route("/")
     });
   })
   .post((req, res) => {
-    let createdAt = new Date().toISOString().slice(0, 10);
     const post = {
+      id: req.body.id,
       title: req.body.title,
       author: req.body.author,
       content: req.body.content,
       category: req.body.category,
-      createdAt,
+      createdAt: req.body.category,
     };
-    console.log(post)
+    console.log(post);
     mysqlConnect.query("INSERT INTO recipes SET?", post, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
@@ -33,16 +33,20 @@ Router.route("/")
     });
   })
   .put((req, res) => {
-    const id = req.params.id;
-    let createdAt = new Date().toISOString().slice(0, 10);
-    const { title, author, content } = req.body;
-    const post = { title, author, content, createAt };
+    const id = req.body.id;
+    const post = {
+      title: req.body.title,
+      author: req.body.author,
+      content: req.body.content,
+      category: req.body.category,
+    };
+    console.log(post)
     mysqlConnect.query(
       "UPDATE recipes SET ? WHERE id = ?",
       [post, id],
       (err, results) => {
         if (!err) {
-          res.send(`post update with ID: ${id}`);
+          res.send(`Recipe update with ID: ${id}`);
         } else {
           console.log(err);
         }
@@ -56,7 +60,7 @@ Router.route("/")
       id,
       (err, results) => {
         if (!err) {
-          res.send(`Post deleted with ID:${id}`);
+          res.send(`Recipe deleted with ID:${id}`);
         } else {
           console.log(err);
         }

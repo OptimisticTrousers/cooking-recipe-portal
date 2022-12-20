@@ -29,6 +29,7 @@ const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState(() => data);
   const [validationErrors, setValidationErrors] = useState({});
+  const [updateData, setUpdateData] = useState({})
 
   // const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
@@ -95,6 +96,8 @@ const Categories = () => {
   );
 
   const handleCreateNewRow = async (values) => {
+    values.id = uuidv4();
+    values.createdAt = Date.now();
     // try {
     //   const { data } = await axios.post(`${apiDomain()}/api/categories/post`, {
     //     method: "POST",
@@ -178,7 +181,10 @@ const Categories = () => {
         renderRowActions={({ row, table }) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => table.setEditingRow(row)}>
+              <IconButton onClick={() => {
+                setCreateModalOpen(true);
+                setUpdateData(row);
+              }}>
                 <Edit />
               </IconButton>
             </Tooltip>
@@ -203,6 +209,7 @@ const Categories = () => {
         open={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
         onSubmit={handleCreateNewRow}
+        updateData={updateData}
       />
     </Box>
   );

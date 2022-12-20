@@ -14,7 +14,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import "bulma/css/bulma.min.css";
@@ -30,22 +29,31 @@ import {
   ChakraProvider,
   FormControl,
   FormLabel,
+  Select,
   Input,
 } from "@chakra-ui/react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 //example of creating a mui dialog modal for creating new rows
-export const PostModal = ({ open, columns, onClose, onSubmit }) => {
-  const [values, setValues] = useState(() =>
-    columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ""] = "";
-      return acc;
-    }, {})
+const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
+
+  const [values, setValues] = useState(
+    () =>
+      updateData ??
+      columns.reduce((acc, column) => {
+        acc[column.accessorKey ?? ""] = "";
+        return acc;
+      }, {})
   );
 
   const handleSubmit = () => {
     //put your validation logic here
+    if (!values.content) {
+      alert("Please enter content");
+      return;
+    }
     onSubmit(values);
     onClose();
   };
@@ -63,22 +71,50 @@ export const PostModal = ({ open, columns, onClose, onSubmit }) => {
             }}
           >
             {columns.map((column) => {
-              if(column.accessorKey === "id" || column.accessorKey === "createdAt") return;
-              if (column.accessorKey === "content") {
+              if (
+                column.accessorKey === "id" ||
+                column.accessorKey === "createdAt"
+              )
+                return;
+              else if (column.accessorKey === "category") {
+                return (
+                  <Box key={column.accessorKey}>
+                    <FormControl>
+                      <FormLabel>Category</FormLabel>
+                      <Select isRequired={true}>
+                        {value.map((category) => {
+                          if (category.name === updateData.category) {
+                            return (
+                              <option value={category.name} selected={true}>
+                                {category.name}
+                              </option>
+                            );
+                          }
+                          return (
+                            <option value={category.name}>
+                              {category.name}
+                            </option>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                );
+              } else if (column.accessorKey === "content") {
                 return (
                   <Box key={column.accessorKey}>
                     <FormControl>
                       <FormLabel>Content</FormLabel>
                       <ReactQuill
                         theme="snow"
-                        value="<p>Hello from CS 306!</p>"
+                        value={updateData.content}
                         name={column.accessorKey}
                         label="Content"
                         onChange={(e) =>
-                          setValues({
-                            ...values,
-                            [e.target.name]: e.target.value,
-                          })
+                          setValues((prevValues) => ({
+                            ...prevValues,
+                            content: e,
+                          }))
                         }
                       />
                     </FormControl>
@@ -90,6 +126,8 @@ export const PostModal = ({ open, columns, onClose, onSubmit }) => {
                     key={column.accessorKey}
                     label={column.header}
                     name={column.accessorKey}
+                    value={updateData[accessorKey]}
+                    isRequired={true}
                     onChange={(e) =>
                       setValues({ ...values, [e.target.name]: e.target.value })
                     }
@@ -110,4 +148,4 @@ export const PostModal = ({ open, columns, onClose, onSubmit }) => {
   );
 };
 
-export default PostModal;
+export default RecipeModal;
