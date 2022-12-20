@@ -64,12 +64,12 @@ const Categories = () => {
     [validationErrors]
   );
   const handleCreateNewRow = async (values) => {
-    values.categoryId = uuidv4();
-    values.createdAt = Date.now();
+    values.original.categoryId = uuidv4();
+    values.original.createdAt = Date.now();
     try {
       const { data } = await axios.post(
         `${apiDomain()}/api/categories`,
-        values
+        values.original
       );
       console.log(data);
     } catch (err) {

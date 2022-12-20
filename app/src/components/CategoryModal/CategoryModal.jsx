@@ -44,29 +44,22 @@ const CategoryModal = ({
   updateData,
   setUpdateData,
 }) => {
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     //put your validation logic here
 
-    const emptyFields = Object.values(updateData.original).some(
-      (element) => element === ""
-    );
-    if (emptyFields) {
-      alert("Please enter all required data");
-      return;
-    }
     onSubmit(updateData);
     onClose();
   };
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">
-        {updateData.original?.categoryId
-          ? "Update Category"
-          : "Create New Category"}
-      </DialogTitle>
-      <DialogContent>
-        <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
+        <DialogTitle textAlign="center">
+          {updateData.original?.categoryId
+            ? "Update Category"
+            : "Create New Category"}
+        </DialogTitle>
+        <DialogContent>
           <Stack
             sx={{
               width: "100%",
@@ -103,16 +96,16 @@ const CategoryModal = ({
               );
             })}
           </Stack>
-        </form>
-      </DialogContent>
-      <DialogActions sx={{ p: "1.25rem" }}>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="secondary" onClick={handleSubmit} variant="contained">
-          {updateData.original?.categoryId
-            ? "Update Recipe"
-            : "Create New Recipe"}
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions sx={{ p: "1.25rem" }}>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button color="secondary" type="submit" variant="contained">
+            {updateData.original?.categoryId
+              ? "Update Recipe"
+              : "Create New Recipe"}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };
