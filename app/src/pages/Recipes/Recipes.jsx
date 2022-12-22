@@ -40,13 +40,14 @@ import axios from "axios";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState(() => data);
+  const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
-  const [updateData, setUpdateData] = useState({})
 
-  // const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
-  // console.log(loading, error, value);
+  useEffect(() => {
+    setTableData(value);
+  }, [value]);
 
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
@@ -82,7 +83,7 @@ const Posts = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "id",
+        accessorKey: "recipeId",
         header: "ID",
         enableColumnOrdering: false,
         enableEditing: false, //disable editing on this column
@@ -90,7 +91,7 @@ const Posts = () => {
         size: 80,
       },
       {
-        accessorKey: "title",
+        accessorKey: "recipeTitle",
         header: "Title",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
@@ -98,7 +99,7 @@ const Posts = () => {
         }),
       },
       {
-        accessorKey: "author",
+        accessorKey: "recipeAuthor",
         header: "Author",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
@@ -106,7 +107,7 @@ const Posts = () => {
         }),
       },
       {
-        accessorKey: "content",
+        accessorKey: "recipeContent",
         header: "Content",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
@@ -114,7 +115,7 @@ const Posts = () => {
         }),
       },
       {
-        accessorKey: "category",
+        accessorKey: "recipeCategory",
         header: "Category",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
@@ -132,45 +133,40 @@ const Posts = () => {
     ],
     [getCommonEditTextFieldProps]
   );
+  const [currentRow, setCurrentRow] = useState(() =>
+    columns.reduce((acc, column) => {
+      acc[column.accessorKey ?? ""] = "";
+      return acc;
+    }, {})
+  );
+
+  const currentRowData = currentRow.original
 
   const handleCreateNewRow = async (values) => {
-    values.id = uuidv4();
+    values.recipeId = uuidv4();
     values.createdAt = Date.now();
-    // console.log(values)
-    // try {
-    //   const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
-    //     method: "POST",
-    //     mode: "cors",
-    //     body: values,
-    //   });
-    //   console.log(data);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
     tableData.push(values);
     setTableData([...tableData]);
   };
 
-  const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
-    console.log(values)
+  const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[row.index] = values;
+      tableData[currentRow.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
-      // try {
-      //   const { data } = await axios.put(
-      //     `${apiDomain()}/api/recipes/${row.id}`,
-      //     {
-      //       method: "POST",
-      //       mode: "cors",
-      //       body: values,
-      //     }
-      //   );
-      //   console.log(data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        const { data } = await axios.put(
+          `${apiDomain()}/api/recipes/${row.id}`, values);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       setTableData([...tableData]);
-      exitEditingMode(); //required to exit editing mode and close modal
     }
   };
 
@@ -181,23 +177,23 @@ const Posts = () => {
   const handleDeleteRow = useCallback(
     async (row) => {
       if (
-        !confirm(`Are you sure you want to delete ${row.getValue("title")}`)
+        !confirm(`Are you sure you want to delete ${row.getValue("recipeTitle")}`)
       ) {
         return;
       }
-      //send api delete request here, then refetch or update local table data for re-render
-      // try {
-      //   const { data } = await axios.delete(
-      //     `${apiDomain()}/api/recipes/${row.id}`,
-      //     {
-      //       method: "POST",
-      //       mode: "cors",
-      //     }
-      //   );
-      //   console.log(data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      // send api delete request here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.delete(
+          `${apiDomain()}/api/recipes/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
@@ -223,10 +219,12 @@ const Posts = () => {
           return (
             <Box sx={{ display: "flex", gap: "1rem" }}>
               <Tooltip arrow placement="left" title="Edit">
-                <IconButton onClick={() => {
-                  setUpdateData(row);
-                  setCreateModalOpen(true)
-                }}>
+                <IconButton
+                  onClick={() => {
+                    setCreateModalOpen(true);
+                    setCurrentRow({index: row.index, original: row.original})
+                  }}
+                >
                   <Edit />
                 </IconButton>
               </Tooltip>
@@ -236,7 +234,7 @@ const Posts = () => {
                 </IconButton>
               </Tooltip>
               <Tooltip arrow placement="right" title="View">
-                <Link to={`/recipes/${row.original.id}`}>
+                <Link to={`/recipes/${row.original.recipeId}`} >
                   <IconButton color="primary">
                     <OpenInNewIcon />
                   </IconButton>
@@ -257,9 +255,21 @@ const Posts = () => {
       <RecipeModal
         columns={columns}
         open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={updateData ? handleSaveRowEdits : handleCreateNewRow}
-        updateData={updateData}
+        onClose={() => {
+          setCreateModalOpen(false);
+          setCurrentRow((prevData) => {
+            return {
+              ...prevData,
+              original: columns.reduce((acc, column) => {
+                acc[column.accessorKey ?? ""] = "";
+                return acc;
+              }, {}),
+            };
+          });
+        }}
+        onSubmit={currentRow.original?.recipeId ? handleSaveRowEdits : handleCreateNewRow}
+        currentRowData={currentRowData}
+        setCurrentRow={setCurrentRow}
       />
     </Box>
   );

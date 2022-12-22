@@ -7,7 +7,8 @@ import Date from "../../components/Date/Date";
 import { BsCalendar3 } from "react-icons/bs";
 import {posts} from "../../data/data"
 
-const SinglePostPage = () => {
+const SinglePostPage = (props) => {
+  console.log(location)
   const { postId } = useParams();
 
   const { createdAt, author, content, title } = posts.find(

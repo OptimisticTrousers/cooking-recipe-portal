@@ -15,16 +15,15 @@ Router.route("/")
     });
   })
   .post((req, res) => {
-    const post = {
-      recipeId: req.body.id,
-      recipeTitle: req.body.title,
-      recipeAuthor: req.body.author,
-      recipeContent: req.body.content,
-      recipeCategory: req.body.category,
-      createdAt: req.body.category,
+    const recipe = {
+      recipeId: req.body.recipeId,
+      recipeTitle: req.body.recipeTitle,
+      recipeAuthor: req.body.recipeAuthor,
+      recipeContent: req.body.recipeContent,
+      recipeCategory: req.body.recipeCategory,
+      createdAt: req.body.createdAt,
     };
-    console.log(post);
-    mysqlConnect.query("INSERT INTO recipes SET?", post, (err, results) => {
+    mysqlConnect.query("INSERT INTO recipes SET?", recipe, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
       } else {
@@ -33,17 +32,16 @@ Router.route("/")
     });
   })
   .put((req, res) => {
-    const id = req.body.id;
-    const post = {
-      title: req.body.title,
-      author: req.body.author,
-      content: req.body.content,
-      category: req.body.category,
+    const id = req.body.recipeId;
+    const recipe = {
+      title: req.body.recipeTitle,
+      author: req.body.recipeAuthor,
+      content: req.body.recipeContent,
+      category: req.body.recipeCategory,
     };
-    console.log(post)
     mysqlConnect.query(
       "UPDATE recipes SET ? WHERE id = ?",
-      [post, id],
+      [recipe, id],
       (err, results) => {
         if (!err) {
           res.send(`Recipe update with ID: ${id}`);
@@ -54,7 +52,7 @@ Router.route("/")
     );
   })
   .delete((req, res) => {
-    const id = req.params.id;
+    const id = req.params.categoryId;
     mysqlConnect.query(
       "DELETE FROM recipes WHERE id = ?",
       id,

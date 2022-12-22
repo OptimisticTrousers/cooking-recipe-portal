@@ -197,7 +197,7 @@ const Categories = () => {
           });
         }}
         onSubmit={
-          currentRow.original?.categoryId
+          currentRow.original?.categoryName
             ? handleSaveRowEdits
             : handleCreateNewRow
         }
