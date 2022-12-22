@@ -17,14 +17,22 @@ Router.route("/")
   .post((req, res) => {
     const {
       recipeId,
-			recipeTitle,
+      recipeTitle,
       recipeAuthor,
-			createdAt,
+      createdAt,
       recipeContent,
       recipeCategory,
-       } = req.body; 
-		const post = [recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory];
-		const sql = 'INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)';
+    } = req.body;
+    const post = [
+      recipeId,
+      recipeTitle,
+      recipeAuthor,
+      createdAt,
+      recipeContent,
+      recipeCategory,
+    ];
+    const sql =
+      "INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)";
     mysqlConnect.query(sql, post, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
@@ -35,6 +43,20 @@ Router.route("/")
   });
 
 Router.route("/:recipeId")
+  .get((req, res) => {
+    const id = req.params.recipeId;
+    mysqlConnect.query(
+      "SELECT * FROM recipes WHERE recipeId = ?",
+      [id],
+      (err, results) => {
+        if (!err) {
+          res.send(`Recipe get with ID: ${id}`);
+        } else {
+          console.log(err);
+        }
+      }
+    );
+  })
   .put((req, res) => {
     const id = req.params.recipeId;
     const recipe = {
