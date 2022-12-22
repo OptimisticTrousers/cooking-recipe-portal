@@ -8,7 +8,7 @@ const navItems = ["Recipes", "Categories"];
 const Navbar = () => {
   return (
     <AppBar component="nav">
-      <div className="flex" style={{padding: "2rem"}}>
+      <div className="flex" style={{ padding: "2rem" }}>
         <Link to="/">
           <Typography
             variant="h6"
@@ -17,7 +17,7 @@ const Navbar = () => {
               flexGrow: 1,
               textAlign: { xs: "center", sm: "left" },
               color: "#fff",
-              paddingLeft: {xs: "0px", sm: "12px"}
+              paddingLeft: { xs: "0px", sm: "12px" },
             }}
           >
             HOME
@@ -25,7 +25,11 @@ const Navbar = () => {
         </Link>
         <div className="flex">
           {navItems.map((item, index) => (
-            <Link to={`/${item.toLowerCase()}`} className="button is-light m-2" key={index}>
+            <Link
+              to={`/${item.toLowerCase()}`}
+              className="button is-light m-2"
+              key={index}
+            >
               {item}
             </Link>
           ))}

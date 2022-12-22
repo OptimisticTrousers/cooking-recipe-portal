@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import MaterialReactTable from "material-react-table";
+import React from "react";
 import {
   Box,
   Button,
@@ -7,64 +6,40 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   MenuItem,
   Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Link } from "react-router-dom";
-import "bulma/css/bulma.min.css";
-import { posts as data } from "../../data/data";
-import {
-  apiDomain,
-  validateAge,
-  validateEmail,
-  validateRequired,
-} from "../../utils/utils";
-import useFetch from "../../hooks/useFetch";
-import {
-  ChakraProvider,
+  InputLabel,
   FormControl,
-  FormLabel,
+  TextField,
   Select,
-  Input,
-} from "@chakra-ui/react";
+} from "@mui/material";
+import { apiDomain } from "../../utils/utils";
+import useFetch from "../../hooks/useFetch";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 //example of creating a mui dialog modal for creating new rows
-const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
+const RecipeModal = ({
+  open,
+  columns,
+  onClose,
+  onSubmit,
+  currentRowData,
+  setCurrentRow,
+}) => {
   const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
-
-  console.log(value)
-
-  const [values, setValues] = useState(
-    () =>
-      updateData ??
-      columns.reduce((acc, column) => {
-        acc[column.accessorKey ?? ""] = "";
-        return acc;
-      }, {})
-  );
 
   const handleSubmit = () => {
     //put your validation logic here
-    if (!values.content) {
-      alert("Please enter content");
-      return;
-    }
-    onSubmit(values);
+    onSubmit(currentRowData);
     onClose();
   };
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Recipe</DialogTitle>
-      <DialogContent>
-        <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
+        <DialogTitle textAlign="center">Create New Recipe</DialogTitle>
+        <DialogContent>
           <Stack
             sx={{
               width: "100%",
@@ -74,49 +49,80 @@ const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
           >
             {columns.map((column) => {
               if (
-                column.accessorKey === "id" ||
+                column.accessorKey === "recipeId" ||
                 column.accessorKey === "createdAt"
               )
                 return;
-              else if (column.accessorKey === "category") {
+              else if (column.accessorKey === "recipeCategory") {
                 return (
                   <Box key={column.accessorKey}>
-                    <FormControl>
-                      <FormLabel>Category</FormLabel>
-                      <Select isRequired={true}>
+                    <FormControl fullWidth>
+                      <InputLabel>Category</InputLabel>
+                      <Select
+                        label="Category"
+                        id="category"
+                        defaultValue={currentRowData?.recipeCategory}
+                        onChange={(e) => {
+                          setCurrentRow((prevUpdateData) => {
+                            return {
+                              ...prevUpdateData,
+                              original: {
+                                ...prevUpdateData.original,
+                                recipeCategory: e.target.value,
+                              },
+                            };
+                          });
+                        }}
+                        required
+                      >
                         {value?.map((category) => {
-                          if (category.name === updateData.category) {
+                          if (
+                            category.categoryName ===
+                            currentRowData?.recipeCategory
+                          ) {
                             return (
-                              <option value={category.name} selected={true}>
-                                {category.name}
-                              </option>
+                              <MenuItem
+                                key={category.categoryName}
+                                value={category.categoryName}
+                                selected
+                              >
+                                {category.categoryName}
+                              </MenuItem>
                             );
                           }
                           return (
-                            <option value={category.name}>
-                              {category.name}
-                            </option>
+                            <MenuItem
+                              key={category.categoryName}
+                              value={category.categoryName}
+                            >
+                              {category.categoryName}
+                            </MenuItem>
                           );
                         })}
                       </Select>
                     </FormControl>
                   </Box>
                 );
-              } else if (column.accessorKey === "content") {
+              } else if (column.accessorKey === "recipeContent") {
                 return (
                   <Box key={column.accessorKey}>
                     <FormControl>
-                      <FormLabel>Content</FormLabel>
+                      <InputLabel>Content</InputLabel>
                       <ReactQuill
                         theme="snow"
-                        value={updateData.content}
+                        value={currentRowData?.[column.accessorKey]}
                         name={column.accessorKey}
                         label="Content"
                         onChange={(e) =>
-                          setValues((prevValues) => ({
-                            ...prevValues,
-                            content: e,
-                          }))
+                          setCurrentRow((prevUpdateData) => {
+                            return {
+                              ...prevUpdateData,
+                              original: {
+                                ...prevUpdateData.original,
+                                recipeContent: e,
+                              },
+                            };
+                          })
                         }
                       />
                     </FormControl>
@@ -128,24 +134,32 @@ const RecipeModal = ({ open, columns, onClose, onSubmit, updateData }) => {
                     key={column.accessorKey}
                     label={column.header}
                     name={column.accessorKey}
-                    value={updateData[column.accessorKey]}
-                    isRequired={true}
+                    value={currentRowData?.[column.accessorKey]}
+                    required
                     onChange={(e) =>
-                      setValues({ ...values, [e.target.name]: e.target.value })
+                      setCurrentRow((prevUpdateData) => {
+                        return {
+                          ...prevUpdateData,
+                          original: {
+                            ...prevUpdateData.original,
+                            [e.target.name]: e.target.value,
+                          },
+                        };
+                      })
                     }
                   />
                 );
               }
             })}
           </Stack>
-        </form>
-      </DialogContent>
-      <DialogActions sx={{ p: "1.25rem" }}>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button color="secondary" onClick={handleSubmit} variant="contained">
-          Create New Recipe
-        </Button>
-      </DialogActions>
+        </DialogContent>
+        <DialogActions sx={{ p: "1.25rem" }}>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button color="secondary" type="submit" variant="contained">
+            Create New Recipe
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

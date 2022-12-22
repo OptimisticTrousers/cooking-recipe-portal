@@ -2,87 +2,45 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  MenuItem,
-  Stack,
-  TextField,
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import RecipeModal from "../../components/RecipeModal/RecipeModal";
 import "bulma/css/bulma.min.css";
-import { posts as data } from "../../data/data";
 import {
   apiDomain,
-  validateAge,
-  validateEmail,
-  validateRequired,
 } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
-import {
-  ChakraProvider,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
-const Posts = () => {
+const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
+<<<<<<< HEAD
   const [tableData, setTableData] = useState();
+=======
+  const [tableData, setTableData] = useState([]);
+>>>>>>> e5c17472178c64d9fc6fdfa4f95a8db5cc600e99
   const [validationErrors, setValidationErrors] = useState({});
-  const [updateData, setUpdateData] = useState({})
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
+<<<<<<< HEAD
   console.log(loading, error, value);
+=======
+  useEffect(() => {
+    setTableData(value);
+  }, [value]);
+>>>>>>> e5c17472178c64d9fc6fdfa4f95a8db5cc600e99
 
-  const getCommonEditTextFieldProps = useCallback(
-    (cell) => {
-      return {
-        error: !!validationErrors[cell.id],
-        helperText: validationErrors[cell.id],
-        onBlur: (event) => {
-          const isValid =
-            cell.column.id === "email"
-              ? validateEmail(event.target.value)
-              : cell.column.id === "age"
-              ? validateAge(+event.target.value)
-              : validateRequired(event.target.value);
-          if (!isValid) {
-            //set validation error for cell if invalid
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: `${cell.column.columnDef.header} is required`,
-            });
-          } else {
-            //remove validation error for cell if valid
-            delete validationErrors[cell.id];
-            setValidationErrors({
-              ...validationErrors,
-            });
-          }
-        },
-      };
-    },
-    [validationErrors]
-  );
   //should be memoized or stable
   const columns = useMemo(
     () => [
       {
-        accessorKey: "id",
+        accessorKey: "recipeId",
         header: "ID",
         enableColumnOrdering: false,
         enableEditing: false, //disable editing on this column
@@ -90,87 +48,70 @@ const Posts = () => {
         size: 80,
       },
       {
-        accessorKey: "title",
+        accessorKey: "recipeTitle",
         header: "Title",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
-        accessorKey: "author",
+        accessorKey: "recipeAuthor",
         header: "Author",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
-        accessorKey: "content",
+        accessorKey: "recipeContent",
         header: "Content",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
-        accessorKey: "category",
+        accessorKey: "recipeCategory",
         header: "Category",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "createdAt",
         header: "Created At",
         size: 80,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
     ],
-    [getCommonEditTextFieldProps]
+    []
   );
 
+  const [currentRow, setCurrentRow] = useState(() =>
+    columns.reduce((acc, column) => {
+      acc[column.accessorKey ?? ""] = "";
+      return acc;
+    }, {})
+  );
+
+  const currentRowData = currentRow.original;
+
   const handleCreateNewRow = async (values) => {
-    values.id = uuidv4();
+    values.recipeId = uuidv4();
     values.createdAt = Date.now();
-    // console.log(values)
-    // try {
-    //   const { data } = await axios.post(`${apiDomain()}/api/recipes`, {
-    //     method: "POST",
-    //     mode: "cors",
-    //     body: values,
-    //   });
-    //   console.log(data);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
     tableData.push(values);
     setTableData([...tableData]);
   };
 
-  const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
-    console.log(values)
+  const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[row.index] = values;
+      tableData[currentRow.index] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
-      // try {
-      //   const { data } = await axios.put(
-      //     `${apiDomain()}/api/recipes/${row.id}`,
-      //     {
-      //       method: "POST",
-      //       mode: "cors",
-      //       body: values,
-      //     }
-      //   );
-      //   console.log(data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      try {
+        const { data } = await axios.put(
+          `${apiDomain()}/api/recipes/${currentRowData.recipeId}`,
+          values
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       setTableData([...tableData]);
-      exitEditingMode(); //required to exit editing mode and close modal
     }
   };
 
@@ -181,23 +122,25 @@ const Posts = () => {
   const handleDeleteRow = useCallback(
     async (row) => {
       if (
-        !confirm(`Are you sure you want to delete ${row.getValue("title")}`)
+        !confirm(
+          `Are you sure you want to delete ${row.getValue("recipeTitle")}`
+        )
       ) {
         return;
       }
-      //send api delete request here, then refetch or update local table data for re-render
-      // try {
-      //   const { data } = await axios.delete(
-      //     `${apiDomain()}/api/recipes/${row.id}`,
-      //     {
-      //       method: "POST",
-      //       mode: "cors",
-      //     }
-      //   );
-      //   console.log(data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      // send api delete request here, then refetch or update local table data for re-render
+      try {
+        const { data } = await axios.delete(
+          `${apiDomain()}/api/recipes/${row.id}`,
+          {
+            method: "POST",
+            mode: "cors",
+          }
+        );
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     },
@@ -223,10 +166,12 @@ const Posts = () => {
           return (
             <Box sx={{ display: "flex", gap: "1rem" }}>
               <Tooltip arrow placement="left" title="Edit">
-                <IconButton onClick={() => {
-                  setUpdateData(row);
-                  setCreateModalOpen(true)
-                }}>
+                <IconButton
+                  onClick={() => {
+                    setCreateModalOpen(true);
+                    setCurrentRow({ index: row.index, original: row.original });
+                  }}
+                >
                   <Edit />
                 </IconButton>
               </Tooltip>
@@ -236,7 +181,7 @@ const Posts = () => {
                 </IconButton>
               </Tooltip>
               <Tooltip arrow placement="right" title="View">
-                <Link to={`/recipes/${row.original.id}`}>
+                <Link to={`/recipes/${row.original.recipeId}`}>
                   <IconButton color="primary">
                     <OpenInNewIcon />
                   </IconButton>
@@ -257,12 +202,28 @@ const Posts = () => {
       <RecipeModal
         columns={columns}
         open={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onSubmit={updateData ? handleSaveRowEdits : handleCreateNewRow}
-        updateData={updateData}
+        onClose={() => {
+          setCreateModalOpen(false);
+          setCurrentRow((prevData) => {
+            return {
+              ...prevData,
+              original: columns.reduce((acc, column) => {
+                acc[column.accessorKey ?? ""] = "";
+                return acc;
+              }, {}),
+            };
+          });
+        }}
+        onSubmit={
+          currentRow.original?.recipeId
+            ? handleSaveRowEdits
+            : handleCreateNewRow
+        }
+        currentRowData={currentRowData}
+        setCurrentRow={setCurrentRow}
       />
     </Box>
   );
 };
 
-export default Posts;
+export default Recipes;

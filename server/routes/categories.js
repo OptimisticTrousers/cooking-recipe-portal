@@ -16,7 +16,6 @@ Router.route("/")
   })
   .post((req, res, next) => {
     const category = {
-      categoryId: req.body.categoryId,
       categoryName: req.body.categoryName,
       categoryDescription: req.body.categoryDescription,
       createdAt: req.body.createdAt,
@@ -36,13 +35,12 @@ Router.route("/")
 
 Router.route("/:categoryId")
   .put((req, res) => {
-    const id = req.params.categoryId;
     const category = {
       categoryName: req.body.categoryName,
       categoryDescription: req.body.categoryDescription,
     };
     mysqlConnect.query(
-      "UPDATE categories SET ? WHERE categoryId = ?",
+      "UPDATE categories SET ? WHERE categoryName = ?",
       [category, id],
       (err, results) => {
         if (!err) {
@@ -56,7 +54,7 @@ Router.route("/:categoryId")
   .delete((req, res) => {
     const id = req.params.categoryId;
     mysqlConnect.query(
-      "DELETE FROM categories WHERE categoryId = ?",
+      "DELETE FROM categories WHERE categoryName = ?",
       id,
       (err, results) => {
         if (!err) {
