@@ -78,6 +78,7 @@ const RecipeModal = ({
                       <Select
                         label="Recipe Category"
                         name={column.accessorKey}
+                        value={currentRowData?.categoryName ?? ""}
                         required
                       >
                         {value?.map((category) => {

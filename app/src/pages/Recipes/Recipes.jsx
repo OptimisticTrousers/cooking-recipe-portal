@@ -10,12 +10,11 @@ import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import { posts } from "../../data/data";
 import Loading from "../../components/Loading/Loading";
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState(() => posts);
+  const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
   const [currentRowIndex, setCurrentRowIndex] = useState();
 

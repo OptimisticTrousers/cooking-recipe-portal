@@ -25,14 +25,10 @@ const CategoryModal = ({
     //put your validation logic here
     event.preventDefault();
     const { categoryName, categoryDescription } = event.currentTarget.elements;
-
     const category = {
       categoryName: categoryName.value,
       categoryDescription: categoryDescription.value,
     };
-
-    console.log(category);
-
     if (currentRowIndex) {
       handleSaveRowEdits(category);
     } else {
