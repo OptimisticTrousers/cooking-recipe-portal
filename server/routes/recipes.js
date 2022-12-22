@@ -15,16 +15,18 @@ Router.route("/")
     });
   })
   .post((req, res) => {
-    const post = {
-      recipeId: req.body.id,
-      recipeTitle: req.body.title,
-      recipeAuthor: req.body.author,
-      recipeContent: req.body.content,
-      recipeCategory: req.body.category,
-      createdAt: req.body.category,
-    };
-    console.log(post);
-    mysqlConnect.query("INSERT INTO recipes SET?", post, (err, results) => {
+    const {
+      recipeId,
+			recipeTitle,
+      recipeAuthor,
+			createdAt,
+      recipeContent,
+      recipeCategory,
+       } = req.body; 
+		const post = [recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory];
+		const sql = 'INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)';
+		// console.log(req.body);
+    mysqlConnect.query(sql, post, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
       } else {

@@ -40,13 +40,13 @@ import axios from "axios";
 
 const Posts = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState(() => data);
+  const [tableData, setTableData] = useState();
   const [validationErrors, setValidationErrors] = useState({});
   const [updateData, setUpdateData] = useState({})
 
-  // const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
-  // console.log(loading, error, value);
+  console.log(loading, error, value);
 
   const getCommonEditTextFieldProps = useCallback(
     (cell) => {
