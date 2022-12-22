@@ -80,7 +80,9 @@ const Recipes = () => {
 
   const handleCreateNewRow = async (values) => {
     values.recipeId = uuidv4();
-    values.createdAt = new Date();
+		// here is the change i will make 
+    values.createdAt = new Date().toISOString().slice(0,10);
+
     try {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);
       console.log(data);
