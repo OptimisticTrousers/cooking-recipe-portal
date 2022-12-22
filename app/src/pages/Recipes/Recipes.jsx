@@ -2,43 +2,22 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  MenuItem,
-  Stack,
-  TextField,
   Tooltip,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useDisclosure } from "@chakra-ui/react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import RecipeModal from "../../components/RecipeModal/RecipeModal";
 import "bulma/css/bulma.min.css";
-import { posts as data } from "../../data/data";
 import {
   apiDomain,
-  validateAge,
-  validateEmail,
-  validateRequired,
 } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
-import {
-  ChakraProvider,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 
-const Posts = () => {
+const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
@@ -49,36 +28,6 @@ const Posts = () => {
     setTableData(value);
   }, [value]);
 
-  const getCommonEditTextFieldProps = useCallback(
-    (cell) => {
-      return {
-        error: !!validationErrors[cell.id],
-        helperText: validationErrors[cell.id],
-        onBlur: (event) => {
-          const isValid =
-            cell.column.id === "email"
-              ? validateEmail(event.target.value)
-              : cell.column.id === "age"
-              ? validateAge(+event.target.value)
-              : validateRequired(event.target.value);
-          if (!isValid) {
-            //set validation error for cell if invalid
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: `${cell.column.columnDef.header} is required`,
-            });
-          } else {
-            //remove validation error for cell if valid
-            delete validationErrors[cell.id];
-            setValidationErrors({
-              ...validationErrors,
-            });
-          }
-        },
-      };
-    },
-    [validationErrors]
-  );
   //should be memoized or stable
   const columns = useMemo(
     () => [
@@ -94,45 +43,31 @@ const Posts = () => {
         accessorKey: "recipeTitle",
         header: "Title",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "recipeAuthor",
         header: "Author",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "recipeContent",
         header: "Content",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "recipeCategory",
         header: "Category",
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
       {
         accessorKey: "createdAt",
         header: "Created At",
         size: 80,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
       },
     ],
-    [getCommonEditTextFieldProps]
+    []
   );
+
   const [currentRow, setCurrentRow] = useState(() =>
     columns.reduce((acc, column) => {
       acc[column.accessorKey ?? ""] = "";
@@ -140,7 +75,7 @@ const Posts = () => {
     }, {})
   );
 
-  const currentRowData = currentRow.original
+  const currentRowData = currentRow.original;
 
   const handleCreateNewRow = async (values) => {
     values.recipeId = uuidv4();
@@ -161,7 +96,9 @@ const Posts = () => {
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipes/${currentRowData.recipeId}`, values);
+          `${apiDomain()}/api/recipes/${currentRowData.recipeId}`,
+          values
+        );
         console.log(data);
       } catch (err) {
         console.log(err);
@@ -177,7 +114,9 @@ const Posts = () => {
   const handleDeleteRow = useCallback(
     async (row) => {
       if (
-        !confirm(`Are you sure you want to delete ${row.getValue("recipeTitle")}`)
+        !confirm(
+          `Are you sure you want to delete ${row.getValue("recipeTitle")}`
+        )
       ) {
         return;
       }
@@ -222,7 +161,7 @@ const Posts = () => {
                 <IconButton
                   onClick={() => {
                     setCreateModalOpen(true);
-                    setCurrentRow({index: row.index, original: row.original})
+                    setCurrentRow({ index: row.index, original: row.original });
                   }}
                 >
                   <Edit />
@@ -234,7 +173,7 @@ const Posts = () => {
                 </IconButton>
               </Tooltip>
               <Tooltip arrow placement="right" title="View">
-                <Link to={`/recipes/${row.original.recipeId}`} >
+                <Link to={`/recipes/${row.original.recipeId}`}>
                   <IconButton color="primary">
                     <OpenInNewIcon />
                   </IconButton>
@@ -267,7 +206,11 @@ const Posts = () => {
             };
           });
         }}
-        onSubmit={currentRow.original?.recipeId ? handleSaveRowEdits : handleCreateNewRow}
+        onSubmit={
+          currentRow.original?.recipeId
+            ? handleSaveRowEdits
+            : handleCreateNewRow
+        }
         currentRowData={currentRowData}
         setCurrentRow={setCurrentRow}
       />
@@ -275,4 +218,4 @@ const Posts = () => {
   );
 };
 
-export default Posts;
+export default Recipes;

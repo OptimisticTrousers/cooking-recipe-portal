@@ -1,27 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Stack,
-  TextField,
-  Tooltip,
-} from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import CategoryModal from "../../components/CategoryModal/CategoryModal";
 import { useDisclosure } from "@chakra-ui/react";
 import "bulma/css/bulma.min.css";
-import {
-  validateAge,
-  validateEmail,
-  validateRequired,
-} from "../../utils/utils";
-import { categories as data } from "../../data/data";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { apiDomain } from "../../utils/utils";
@@ -29,10 +12,14 @@ import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
 
 const Categories = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
+
+  useEffect(() => {
+    setTableData(value);
+  }, [value]);
 
   const columns = useMemo(
     () => [
@@ -87,12 +74,6 @@ const Categories = () => {
     tableData.push(values);
     setTableData([...tableData]);
   };
-
-  const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
-
-  useEffect(() => {
-    setTableData(value);
-  }, [value]);
 
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
@@ -159,7 +140,7 @@ const Categories = () => {
               <IconButton
                 onClick={() => {
                   setCreateModalOpen(true);
-                  setCurrentRow({index: row.index, original: row.original});
+                  setCurrentRow({ index: row.index, original: row.original });
                 }}
               >
                 <Edit />

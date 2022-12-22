@@ -5,11 +5,11 @@ import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import Date from "../../components/Date/Date";
 import { BsCalendar3 } from "react-icons/bs";
-import {posts} from "../../data/data"
+import { posts } from "../../data/data";
 
 const SinglePostPage = (props) => {
-  console.log(location)
-  const { postId } = useParams();
+  console.log(location);
+  const { recipeId } = useParams();
 
   const { createdAt, author, content, title } = posts.find(
     (item) => item.id === Number(postId)

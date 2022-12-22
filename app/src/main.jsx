@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route index element={<Home />} />
           <Route path="recipes">
             <Route index element={<Recipes />} />
-            <Route path=":postId" element={<SinglePostPage />} />
+            <Route path=":recipeId" element={<SinglePostPage />} />
           </Route>
           <Route path="categories" element={<Categories />} />
         </Route>

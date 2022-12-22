@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import MaterialReactTable from "material-react-table";
+import React from "react";
 import {
   Box,
   Button,
@@ -7,25 +6,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   MenuItem,
   Stack,
   InputLabel,
   FormControl,
   TextField,
   Select,
-  Tooltip,
 } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Link } from "react-router-dom";
-import { posts as data } from "../../data/data";
-import {
-  apiDomain,
-  validateAge,
-  validateEmail,
-  validateRequired,
-} from "../../utils/utils";
+import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";

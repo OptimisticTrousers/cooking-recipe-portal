@@ -1,38 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import MaterialReactTable from "material-react-table";
+import React from "react";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  MenuItem,
   Stack,
   TextField,
-  Tooltip,
 } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import { useDisclosure } from "@chakra-ui/react";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { Link } from "react-router-dom";
-import "bulma/css/bulma.min.css";
-import { posts as data } from "../../data/data";
-import {
-  apiDomain,
-  validateAge,
-  validateEmail,
-  validateRequired,
-} from "../../utils/utils";
-import useFetch from "../../hooks/useFetch";
-import {
-  ChakraProvider,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 //example of creating a mui dialog modal for creating new rows
@@ -99,9 +74,7 @@ const CategoryModal = ({
         <DialogActions sx={{ p: "1.25rem" }}>
           <Button onClick={onClose}>Cancel</Button>
           <Button color="secondary" type="submit" variant="contained">
-            {currentRowData?.categoryId
-              ? "Update Recipe"
-              : "Create New Recipe"}
+            {currentRowData?.categoryId ? "Update Recipe" : "Create New Recipe"}
           </Button>
         </DialogActions>
       </form>
