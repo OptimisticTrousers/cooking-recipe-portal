@@ -35,6 +35,7 @@ const RecipeModal = ({
   const currentRowData = tableData?.[currentRowIndex];
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const { recipeTitle, recipeAuthor, recipeCategory } =
       event.currentTarget.elements;
     const editor = contentRef.getEditor();
@@ -44,7 +45,7 @@ const RecipeModal = ({
     if (currentRowIndex) {
       handleSaveRowEdits(recipe);
     } else {
-      handleSaveRowEdits(recipe);
+      handleCreateNewRow(recipe);
     }
     onClose();
   };

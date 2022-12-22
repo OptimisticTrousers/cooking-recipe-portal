@@ -15,14 +15,29 @@ const CategoryModal = ({
   open,
   columns,
   onClose,
-  onSubmit,
-  currentRowData,
-  setCurrentRow,
+  handleSaveRowEdits,
+  handleCreateNewRow,
+  tableData,
+  currentRowIndex,
 }) => {
+  const currentRowData = tableData?.[currentRowIndex];
   const handleSubmit = (event) => {
     //put your validation logic here
+    event.preventDefault();
+    const { categoryName, categoryDescription } = event.currentTarget.elements;
 
-    onSubmit(currentRowData);
+    const category = {
+      categoryName: categoryName.value,
+      categoryDescription: categoryDescription.value,
+    };
+
+    console.log(category);
+
+    if (currentRowIndex) {
+      handleSaveRowEdits(category);
+    } else {
+      handleCreateNewRow(category);
+    }
     onClose();
   };
 
@@ -53,19 +68,8 @@ const CategoryModal = ({
                   key={column.accessorKey}
                   label={column.header}
                   name={column.accessorKey}
+                  defaultValue={currentRowData?.[column.accessorKey]}
                   required
-                  value={currentRowData?.[column.accessorKey]}
-                  onChange={(e) => {
-                    setCurrentRow((prevUpdateData) => {
-                      return {
-                        ...prevUpdateData,
-                        original: {
-                          ...prevUpdateData.original,
-                          [e.target.name]: e.target.value,
-                        },
-                      };
-                    });
-                  }}
                 />
               );
             })}

@@ -15,6 +15,7 @@ const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const [currentRowIndex, setCurrentRowIndex] = useState();
   const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
   useEffect(() => {
@@ -42,17 +43,8 @@ const Categories = () => {
     []
   );
 
-  const [currentRow, setCurrentRow] = useState(() =>
-    columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ""] = "";
-      return acc;
-    }, {})
-  );
-
-  const currentRowData = currentRow.original;
-
   const handleCreateNewRow = async (values) => {
-    values.createdAt = new Date()
+    values.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
     try {
       const { data } = await axios.post(
         `${apiDomain()}/api/categories`,
@@ -68,7 +60,7 @@ const Categories = () => {
 
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[currentRow.index] = values;
+      tableData[currentRowIndex] = values;
       // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
@@ -111,7 +103,6 @@ const Categories = () => {
     [tableData]
   );
 
-  console.log(currentRow)
   return (
     <Box mt={16}>
       <MaterialReactTable
@@ -133,7 +124,7 @@ const Categories = () => {
               <IconButton
                 onClick={() => {
                   setCreateModalOpen(true);
-                  setCurrentRow({ index: row.index, original: row.original });
+                  setCurrentRowIndex(row.index);
                 }}
               >
                 <Edit />
@@ -149,7 +140,10 @@ const Categories = () => {
         renderTopToolbarCustomActions={() => (
           <button
             className="button is-primary mb-4 mt-4"
-            onClick={() => setCreateModalOpen(true)}
+            onClick={() => {
+              setCreateModalOpen(true);
+              setCurrentRowIndex();
+            }}
           >
             Create Category
           </button>
@@ -160,23 +154,11 @@ const Categories = () => {
         open={createModalOpen}
         onClose={() => {
           setCreateModalOpen(false);
-          setCurrentRow((prevData) => {
-            return {
-              ...prevData,
-              original: columns.reduce((acc, column) => {
-                acc[column.accessorKey ?? ""] = "";
-                return acc;
-              }, {}),
-            };
-          });
         }}
-        onSubmit={
-          currentRow?.original
-            ? handleSaveRowEdits
-            : handleCreateNewRow
-        }
-        currentRowData={currentRowData}
-        setCurrentRow={setCurrentRow}
+        handleSaveRowEdits={handleSaveRowEdits}
+        handleCreateNewRow={handleCreateNewRow}
+        tableData={tableData}
+        currentRowIndex={currentRowIndex}
       />
     </Box>
   );
