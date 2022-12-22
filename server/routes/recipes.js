@@ -15,7 +15,6 @@ Router.route("/")
     });
   })
   .post((req, res) => {
-<<<<<<< HEAD
     const {
       recipeId,
 			recipeTitle,
@@ -28,17 +27,6 @@ Router.route("/")
 		const sql = 'INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)';
 		// console.log(req.body);
     mysqlConnect.query(sql, post, (err, results) => {
-=======
-    const recipe = {
-      recipeId: req.body.recipeId,
-      recipeTitle: req.body.recipeTitle,
-      recipeAuthor: req.body.recipeAuthor,
-      recipeContent: req.body.recipeContent,
-      recipeCategory: req.body.recipeCategory,
-      createdAt: req.body.createdAt,
-    };
-    mysqlConnect.query("INSERT INTO recipes SET?", recipe, (err, results) => {
->>>>>>> e5c17472178c64d9fc6fdfa4f95a8db5cc600e99
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
       } else {
