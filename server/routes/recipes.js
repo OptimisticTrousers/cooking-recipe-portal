@@ -25,7 +25,6 @@ Router.route("/")
        } = req.body; 
 		const post = [recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory];
 		const sql = 'INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)';
-		// console.log(req.body);
     mysqlConnect.query(sql, post, (err, results) => {
       if (!err) {
         res.status(201).send(`post added with ID:${results.insertId}`);
