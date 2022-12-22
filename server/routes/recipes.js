@@ -50,7 +50,8 @@ Router.route("/:recipeId")
       [id],
       (err, results) => {
         if (!err) {
-          res.send(`Recipe get with ID: ${id}`);
+          const [row] = results;
+          res.status(200).send(row);
         } else {
           console.log(err);
         }
