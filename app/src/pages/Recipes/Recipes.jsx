@@ -124,12 +124,7 @@ const Recipes = () => {
       // send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/recipes/${row.id}`,
-          {
-            method: "POST",
-            mode: "cors",
-          }
-        );
+          `${apiDomain()}/api/recipes/${row.original.recipeId}`);
         console.log(data);
       } catch (err) {
         console.log(err);

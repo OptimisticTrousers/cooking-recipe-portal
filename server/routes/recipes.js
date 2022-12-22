@@ -33,15 +33,16 @@ Router.route("/")
         console.log(err);
       }
     });
-  })
+  });
+
+Router.route("/:recipeId")
   .put((req, res) => {
-    console.log(req.body)
-    const id = req.body.recipeId;
+    const id = req.params.recipeId;
     const recipe = {
-      title: req.body.recipeTitle,
-      author: req.body.recipeAuthor,
-      content: req.body.recipeContent,
-      category: req.body.recipeCategory,
+      recipeTitle: req.body.recipeTitle,
+      recipeAuthor: req.body.recipeAuthor,
+      recipeContent: req.body.recipeContent,
+      recipeCategory: req.body.recipeCategory,
     };
     mysqlConnect.query(
       "UPDATE recipes SET ? WHERE recipeId = ?",
