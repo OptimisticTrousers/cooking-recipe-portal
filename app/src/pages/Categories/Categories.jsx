@@ -94,15 +94,19 @@ const Categories = () => {
         const { data } = await axios.delete(
           `${apiDomain()}/api/categories/${row.original.categoryName}`
         );
-        alert(
-          data.sqlMessage +
-            "\n\nHINT: You cannot delete a category who has a foreign key relation to a recipe!"
-        );
+        if (data.sqlMessage) {
+          alert(
+            data.sqlMessage +
+              "\n\nHINT: You cannot delete a category that has relation to a recipe that exists!"
+          );
+        } else {
+          console.log(data);
+          tableData.splice(row.index, 1);
+          setTableData([...tableData]);
+        }
       } catch (err) {
         alert(err);
       }
-      tableData.splice(row.index, 1);
-      setTableData([...tableData]);
     },
     [tableData]
   );
