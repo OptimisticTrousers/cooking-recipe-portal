@@ -1,32 +1,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
-import {
-  Box,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { Link } from "react-router-dom";
 import RecipeModal from "../../components/RecipeModal/RecipeModal";
 import "bulma/css/bulma.min.css";
-import {
-  apiDomain,
-} from "../../utils/utils";
+import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import Loading from "../../components/Loading/Loading";
+import {posts} from "../../data/data"
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(() => posts);
   const [validationErrors, setValidationErrors] = useState({});
+  const [currentRowIndex, setCurrentRowIndex] = useState();
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
   useEffect(() => {
-    setTableData(value);
+    setTableData(() => value);
   }, [value]);
 
   //should be memoized or stable
@@ -69,19 +64,10 @@ const Recipes = () => {
     []
   );
 
-  const [currentRow, setCurrentRow] = useState(() =>
-    columns.reduce((acc, column) => {
-      acc[column.accessorKey ?? ""] = "";
-      return acc;
-    }, {})
-  );
-
-  const currentRowData = currentRow.original;
-
   const handleCreateNewRow = async (values) => {
     values.recipeId = uuidv4();
-		// here is the change i will make 
-    values.createdAt = new Date().toISOString().slice(0,10);
+    // here is the change i will make
+    values.createdAt = new Date().toISOString().slice(0, 10);
 
     try {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);
@@ -93,9 +79,9 @@ const Recipes = () => {
     setTableData([...tableData]);
   };
 
-  const handleSaveRowEdits = async (values) => {
+  const handleSaveRowEdits = async (values, row) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[currentRow.index] = values;
+      tableData[currentRowIndex] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
@@ -126,7 +112,8 @@ const Recipes = () => {
       // send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/recipes/${row.original.recipeId}`);
+          `${apiDomain()}/api/recipes/${row.original.recipeId}`
+        );
         console.log(data);
       } catch (err) {
         console.log(err);
@@ -159,7 +146,7 @@ const Recipes = () => {
                 <IconButton
                   onClick={() => {
                     setCreateModalOpen(true);
-                    setCurrentRow({ index: row.index, original: row.original });
+                    setCurrentRowIndex(row.index);
                   }}
                 >
                   <Edit />
@@ -183,7 +170,10 @@ const Recipes = () => {
         renderTopToolbarCustomActions={() => (
           <button
             className="button is-primary mb-4 mt-4"
-            onClick={() => setCreateModalOpen(true)}
+            onClick={() => {
+              setCreateModalOpen(true);
+              setCurrentRowIndex();
+            }}
           >
             Create Recipe
           </button>
@@ -194,23 +184,11 @@ const Recipes = () => {
         open={createModalOpen}
         onClose={() => {
           setCreateModalOpen(false);
-          setCurrentRow((prevData) => {
-            return {
-              ...prevData,
-              original: columns.reduce((acc, column) => {
-                acc[column.accessorKey ?? ""] = "";
-                return acc;
-              }, {}),
-            };
-          });
         }}
-        onSubmit={
-          currentRow.original?.recipeId
-            ? handleSaveRowEdits
-            : handleCreateNewRow
-        }
-        currentRowData={currentRowData}
-        setCurrentRow={setCurrentRow}
+        handleSaveRowEdits={handleSaveRowEdits}
+        handleCreateNewRow={handleCreateNewRow}
+        tableData={tableData}
+        currentRowIndex={currentRowIndex}
       />
     </Box>
   );

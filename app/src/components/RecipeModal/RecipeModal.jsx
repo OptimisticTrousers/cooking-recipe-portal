@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Button,
@@ -17,28 +17,44 @@ import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useEffect } from "react";
 
 //example of creating a mui dialog modal for creating new rows
 const RecipeModal = ({
   open,
   columns,
   onClose,
-  onSubmit,
-  currentRowData,
-  setCurrentRow,
+  handleSaveRowEdits,
+  handleCreateNewRow,
+  tableData,
+  currentRowIndex,
 }) => {
   const { loading, error, value } = useFetch(`${apiDomain()}/api/categories`);
 
-  const handleSubmit = () => {
-    //put your validation logic here
-    onSubmit(currentRowData);
+  const contentRef = useRef(null);
+  const currentRowData = tableData?.[currentRowIndex];
+
+  const handleSubmit = (event) => {
+    const { recipeTitle, recipeAuthor, recipeCategory } =
+      event.currentTarget.elements;
+    const editor = contentRef.getEditor();
+    const unprivlegedEditor = contentRef.makeUnprivilegedEditor(editor);
+    const recipeContent = unprivlegedEditor.getHTML();
+    const recipe = { recipeTitle, recipeAuthor, recipeCategory, recipeContent };
+    if (currentRowIndex) {
+      handleSaveRowEdits(recipe);
+    } else {
+      handleSaveRowEdits(recipe);
+    }
     onClose();
   };
 
   return (
     <Dialog open={open}>
       <form onSubmit={handleSubmit}>
-        <DialogTitle textAlign="center">Create New Recipe</DialogTitle>
+        <DialogTitle textAlign="center">
+          {currentRowIndex ? "Update Recipe" : "Create New Recipe"}
+        </DialogTitle>
         <DialogContent>
           <Stack
             sx={{
@@ -59,37 +75,11 @@ const RecipeModal = ({
                     <FormControl fullWidth>
                       <InputLabel>Category</InputLabel>
                       <Select
-                        label="Category"
-                        id="category"
-                        defaultValue={currentRowData?.recipeCategory}
-                        onChange={(e) => {
-                          setCurrentRow((prevUpdateData) => {
-                            return {
-                              ...prevUpdateData,
-                              original: {
-                                ...prevUpdateData.original,
-                                recipeCategory: e.target.value,
-                              },
-                            };
-                          });
-                        }}
+                        label="Recipe Category"
+                        name={column.accessorKey}
                         required
                       >
                         {value?.map((category) => {
-                          if (
-                            category.categoryName ===
-                            currentRowData?.recipeCategory
-                          ) {
-                            return (
-                              <MenuItem
-                                key={category.categoryName}
-                                value={category.categoryName}
-                                selected
-                              >
-                                {category.categoryName}
-                              </MenuItem>
-                            );
-                          }
                           return (
                             <MenuItem
                               key={category.categoryName}
@@ -109,21 +99,10 @@ const RecipeModal = ({
                     <FormControl>
                       <InputLabel>Content</InputLabel>
                       <ReactQuill
+                        ref={contentRef}
                         theme="snow"
-                        value={currentRowData?.[column.accessorKey]}
-                        name={column.accessorKey}
-                        label="Content"
-                        onChange={(e) =>
-                          setCurrentRow((prevUpdateData) => {
-                            return {
-                              ...prevUpdateData,
-                              original: {
-                                ...prevUpdateData.original,
-                                recipeContent: e,
-                              },
-                            };
-                          })
-                        }
+                        defaultValue={currentRowData?.[column.accessorKey]}
+                        label="Recipe Content"
                       />
                     </FormControl>
                   </Box>
@@ -134,19 +113,8 @@ const RecipeModal = ({
                     key={column.accessorKey}
                     label={column.header}
                     name={column.accessorKey}
-                    value={currentRowData?.[column.accessorKey]}
+                    defaultValue={currentRowData?.[column.accessorKey]}
                     required
-                    onChange={(e) =>
-                      setCurrentRow((prevUpdateData) => {
-                        return {
-                          ...prevUpdateData,
-                          original: {
-                            ...prevUpdateData.original,
-                            [e.target.name]: e.target.value,
-                          },
-                        };
-                      })
-                    }
                   />
                 );
               }
