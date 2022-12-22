@@ -125,9 +125,9 @@ const Recipes = () => {
     [tableData]
   );
 
-  if (!tableData?.length || loading) {
-    return <Loading />;
-  }
+  // if (!tableData?.length || loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <Box mt={16} minHeight="100%">
