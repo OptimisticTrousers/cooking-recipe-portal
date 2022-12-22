@@ -73,7 +73,7 @@ const RecipeModal = ({
                       <Select
                         label="Category"
                         id="category"
-                        defaultValue={currentRowData?.categoryName}
+                        defaultValue={currentRowData?.recipeCategory}
                         onChange={(e) => {
                           setCurrentRow((prevUpdateData) => {
                             return {

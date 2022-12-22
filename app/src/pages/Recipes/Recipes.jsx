@@ -161,7 +161,7 @@ const Posts = () => {
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipes/${row.id}`, values);
+          `${apiDomain()}/api/recipes/${currentRowData.recipeId}`, values);
         console.log(data);
       } catch (err) {
         console.log(err);

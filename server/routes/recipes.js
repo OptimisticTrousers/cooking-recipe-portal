@@ -32,6 +32,7 @@ Router.route("/")
     });
   })
   .put((req, res) => {
+    console.log(req.body)
     const id = req.body.recipeId;
     const recipe = {
       title: req.body.recipeTitle,
@@ -40,7 +41,7 @@ Router.route("/")
       category: req.body.recipeCategory,
     };
     mysqlConnect.query(
-      "UPDATE recipes SET ? WHERE id = ?",
+      "UPDATE recipes SET ? WHERE recipeId = ?",
       [recipe, id],
       (err, results) => {
         if (!err) {
@@ -52,9 +53,9 @@ Router.route("/")
     );
   })
   .delete((req, res) => {
-    const id = req.params.categoryId;
+    const id = req.params.recipeId;
     mysqlConnect.query(
-      "DELETE FROM recipes WHERE id = ?",
+      "DELETE FROM recipes WHERE recipeId = ?",
       id,
       (err, results) => {
         if (!err) {
