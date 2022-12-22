@@ -74,6 +74,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #efa311;
 }
 
 @media (max-width: 360px) {

@@ -48,7 +48,7 @@ const Recipes = () => {
       {
         accessorKey: "recipeContent",
         header: "Content",
-        size: 640,
+        size: 1240,
       },
       {
         accessorKey: "recipeCategory",

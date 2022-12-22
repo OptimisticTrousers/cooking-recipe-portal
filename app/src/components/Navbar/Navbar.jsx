@@ -7,7 +7,7 @@ const navItems = ["Recipes", "Categories"];
 
 const Navbar = () => {
   return (
-    <AppBar component="nav">
+    <AppBar component="nav" color="inherit">
       <div className="flex" style={{ padding: "2rem" }}>
         <Link to="/">
           <Typography

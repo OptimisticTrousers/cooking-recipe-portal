@@ -132,7 +132,9 @@ const RecipeModal = ({
         <DialogActions sx={{ p: "1.25rem" }}>
           <Button onClick={onClose}>Cancel</Button>
           <Button color="secondary" type="submit" variant="contained">
-            Create New Recipe
+            {currentRowIndex !== undefined
+              ? "Update Recipe"
+              : "Create New Recipe"}
           </Button>
         </DialogActions>
       </form>
