@@ -10,17 +10,19 @@ import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { posts } from "../../data/data";
+import Loading from "../../components/Loading/Loading";
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState(() => posts);
   const [validationErrors, setValidationErrors] = useState({});
   const [currentRowIndex, setCurrentRowIndex] = useState();
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
   useEffect(() => {
-    setTableData(() => value);
+    setTableData(value);
   }, [value]);
 
   //should be memoized or stable
@@ -66,7 +68,7 @@ const Recipes = () => {
   const handleCreateNewRow = async (values) => {
     values.recipeId = uuidv4();
     // here is the change i will make
-    values.createdAt = new Date().toISOString().slice(0, 10);
+    values.createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
 
     try {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);
@@ -84,7 +86,7 @@ const Recipes = () => {
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipes/${currentRowData.recipeId}`,
+          `${apiDomain()}/api/recipes/${values.recipeId}`,
           values
         );
         console.log(data);
@@ -122,6 +124,10 @@ const Recipes = () => {
     },
     [tableData]
   );
+
+  if (!tableData?.length || loading) {
+    return <Loading />;
+  }
 
   return (
     <Box mt={16} minHeight="100%">

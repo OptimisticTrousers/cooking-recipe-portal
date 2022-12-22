@@ -10,6 +10,7 @@ import axios from "axios";
 import { apiDomain } from "../../utils/utils";
 import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
+import Loading from "../../components/Loading/Loading";
 
 const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -102,6 +103,10 @@ const Categories = () => {
     },
     [tableData]
   );
+
+  if (!tableData?.length || loading) {
+    return <Loading />;
+  }
 
   return (
     <Box mt={16}>
