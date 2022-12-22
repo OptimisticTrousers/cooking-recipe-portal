@@ -19,22 +19,15 @@ import axios from "axios";
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-<<<<<<< HEAD
-  const [tableData, setTableData] = useState();
-=======
   const [tableData, setTableData] = useState([]);
->>>>>>> e5c17472178c64d9fc6fdfa4f95a8db5cc600e99
   const [validationErrors, setValidationErrors] = useState({});
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
-<<<<<<< HEAD
   console.log(loading, error, value);
-=======
   useEffect(() => {
     setTableData(value);
   }, [value]);
->>>>>>> e5c17472178c64d9fc6fdfa4f95a8db5cc600e99
 
   //should be memoized or stable
   const columns = useMemo(
