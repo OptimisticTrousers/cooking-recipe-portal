@@ -24,14 +24,6 @@ const Categories = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "categoryId",
-        header: "ID",
-        enableColumnOrdering: false,
-        enableEditing: false, //disable editing on this column
-        enableSorting: false,
-        size: 80,
-      },
-      {
         accessorKey: "categoryName",
         header: "Name",
         size: 140,
@@ -60,8 +52,7 @@ const Categories = () => {
   const currentRowData = currentRow.original;
 
   const handleCreateNewRow = async (values) => {
-    values.categoryId = uuidv4();
-    values.createdAt = Date.now();
+    values.createdAt = new Date()
     try {
       const { data } = await axios.post(
         `${apiDomain()}/api/categories`,
@@ -81,7 +72,7 @@ const Categories = () => {
       // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/categories/${values.categoryId}`,
+          `${apiDomain()}/api/categories/${values.categoryName}`,
           values
         );
         console.log(data);
@@ -108,7 +99,7 @@ const Categories = () => {
       // send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/categories/${row.original.categoryId}`
+          `${apiDomain()}/api/categories/${row.original.categoryName}`
         );
         console.log(data);
       } catch (err) {
@@ -119,6 +110,8 @@ const Categories = () => {
     },
     [tableData]
   );
+
+  console.log(currentRow)
   return (
     <Box mt={16}>
       <MaterialReactTable
@@ -178,7 +171,7 @@ const Categories = () => {
           });
         }}
         onSubmit={
-          currentRow.original?.categoryName
+          currentRow?.original
             ? handleSaveRowEdits
             : handleCreateNewRow
         }

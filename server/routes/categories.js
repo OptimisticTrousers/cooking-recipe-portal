@@ -33,7 +33,7 @@ Router.route("/")
     );
   });
 
-Router.route("/:categoryId")
+Router.route("/:categoryName")
   .put((req, res) => {
     const category = {
       categoryName: req.body.categoryName,
@@ -41,10 +41,10 @@ Router.route("/:categoryId")
     };
     mysqlConnect.query(
       "UPDATE categories SET ? WHERE categoryName = ?",
-      [category, id],
+      [category, req.body.categoryName],
       (err, results) => {
         if (!err) {
-          res.send(`Recipe update with ID: ${id}`);
+          res.send(`Recipe update with name: ${req.body.categoryName}`);
         } else {
           console.log(err);
         }
@@ -52,7 +52,7 @@ Router.route("/:categoryId")
     );
   })
   .delete((req, res) => {
-    const id = req.params.categoryId;
+    const id = req.params.categoryName;
     mysqlConnect.query(
       "DELETE FROM categories WHERE categoryName = ?",
       id,

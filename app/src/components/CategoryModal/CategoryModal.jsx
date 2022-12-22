@@ -30,7 +30,7 @@ const CategoryModal = ({
     <Dialog open={open}>
       <form onSubmit={handleSubmit}>
         <DialogTitle textAlign="center">
-          {currentRowData?.categoryId
+          {currentRowData?.categoryName
             ? "Update Category"
             : "Create New Category"}
         </DialogTitle>
