@@ -18,6 +18,7 @@ import useFetch from "../../hooks/useFetch";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useEffect } from "react";
+import { FormLabel } from "@chakra-ui/react";
 
 //example of creating a mui dialog modal for creating new rows
 const RecipeModal = ({
@@ -38,10 +39,13 @@ const RecipeModal = ({
     event.preventDefault();
     const { recipeTitle, recipeAuthor, recipeCategory } =
       event.currentTarget.elements;
-    const editor = contentRef.getEditor();
-    const unprivlegedEditor = contentRef.makeUnprivilegedEditor(editor);
-    const recipeContent = unprivlegedEditor.getHTML();
-    const recipe = { recipeTitle, recipeAuthor, recipeCategory, recipeContent };
+    const recipeContent = contentRef.current.value;
+    const recipe = {
+      recipeTitle: recipeTitle.value,
+      recipeAuthor: recipeAuthor.value,
+      recipeCategory: recipeCategory.value,
+      recipeContent,
+    };
     if (currentRowIndex) {
       handleSaveRowEdits(recipe);
     } else {
@@ -54,7 +58,9 @@ const RecipeModal = ({
     <Dialog open={open}>
       <form onSubmit={handleSubmit}>
         <DialogTitle textAlign="center">
-          {currentRowIndex ? "Update Recipe" : "Create New Recipe"}
+          {currentRowIndex !== undefined
+            ? "Update Recipe"
+            : "Create New Recipe"}
         </DialogTitle>
         <DialogContent>
           <Stack
@@ -74,11 +80,10 @@ const RecipeModal = ({
                 return (
                   <Box key={column.accessorKey}>
                     <FormControl fullWidth>
-                      <InputLabel>Category</InputLabel>
+                      <FormLabel mb={8}>{column.header}</FormLabel>
                       <Select
-                        label="Recipe Category"
                         name={column.accessorKey}
-                        value={currentRowData?.categoryName ?? ""}
+                        defaultValue={currentRowData?.recipeCategory ?? ""}
                         required
                       >
                         {value?.map((category) => {
@@ -99,25 +104,27 @@ const RecipeModal = ({
                 return (
                   <Box key={column.accessorKey}>
                     <FormControl>
-                      <InputLabel>Content</InputLabel>
+                      <FormLabel mb={8}>{column.header}</FormLabel>
                       <ReactQuill
                         ref={contentRef}
                         theme="snow"
                         defaultValue={currentRowData?.[column.accessorKey]}
-                        label="Recipe Content"
                       />
                     </FormControl>
                   </Box>
                 );
               } else {
                 return (
-                  <TextField
-                    key={column.accessorKey}
-                    label={column.header}
-                    name={column.accessorKey}
-                    defaultValue={currentRowData?.[column.accessorKey]}
-                    required
-                  />
+                  <Box key={column.accessorKey}>
+                    <FormLabel mb={8}>{column.header}</FormLabel>
+                    <TextField
+                      key={column.accessorKey}
+                      name={column.accessorKey}
+                      defaultValue={currentRowData?.[column.accessorKey]}
+                      required
+                      sx={{width: "100%"}}
+                    />
+                  </Box>
                 );
               }
             })}

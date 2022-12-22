@@ -45,7 +45,7 @@ const Categories = () => {
   );
 
   const handleCreateNewRow = async (values) => {
-    values.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    values.createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
     try {
       const { data } = await axios.post(
         `${apiDomain()}/api/categories`,
@@ -94,9 +94,12 @@ const Categories = () => {
         const { data } = await axios.delete(
           `${apiDomain()}/api/categories/${row.original.categoryName}`
         );
-        console.log(data);
+        alert(
+          data.sqlMessage +
+            "\n\nHINT: You cannot delete a category who has a foreign key relation to a recipe!"
+        );
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
@@ -104,9 +107,9 @@ const Categories = () => {
     [tableData]
   );
 
-  // if (!tableData?.length || loading) {
-  //   return <Loading />;
-  // }
+  if (!tableData?.length || loading) {
+    return <Loading />;
+  }
 
   return (
     <Box mt={16}>

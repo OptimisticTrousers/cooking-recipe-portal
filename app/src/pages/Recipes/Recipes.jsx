@@ -79,7 +79,7 @@ const Recipes = () => {
     setTableData([...tableData]);
   };
 
-  const handleSaveRowEdits = async (values, row) => {
+  const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
       tableData[currentRowIndex] = values;
       //send/receive api updates here, then refetch or update local table data for re-render
@@ -124,9 +124,9 @@ const Recipes = () => {
     [tableData]
   );
 
-  // if (!tableData?.length || loading) {
-  //   return <Loading />;
-  // }
+  if (!tableData?.length || loading) {
+    return <Loading />
+  }
 
   return (
     <Box mt={16} minHeight="100%">

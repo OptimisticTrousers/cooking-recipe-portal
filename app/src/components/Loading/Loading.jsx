@@ -1,12 +1,11 @@
-import { Stack, Skeleton } from "@chakra-ui/react";
+import { Loader } from "@mantine/core";
+import { Box, Stack } from "@mui/material";
 
 const Loading = () => {
   return (
-    <Stack>
-      <Skeleton height="20px" />
-      <Skeleton height="20px" />
-      <Skeleton height="20px" />
-    </Stack>
+    <Box sx={{ marginTop: "6rem" }}>
+      <Loader color="dark" size="xl" />;
+    </Box>
   );
 };
 

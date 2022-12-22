@@ -60,7 +60,7 @@ Router.route("/:categoryName")
         if (!err) {
           res.send(`category deleted with ID: ${id}`);
         } else {
-          console.log(err);
+          res.send(err);
         }
       }
     );

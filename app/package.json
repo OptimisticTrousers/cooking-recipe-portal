@@ -12,6 +12,8 @@
     "@chakra-ui/react": "^2.4.3",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mantine/core": "^5.9.5",
+    "@mantine/hooks": "^5.9.5",
     "@mui/material": "^5.11.0",
     "@mui/x-data-grid": "^5.17.16",
     "@tinymce/tinymce-react": "^4.2.0",
