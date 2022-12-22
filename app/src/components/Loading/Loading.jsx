@@ -1,5 +1,5 @@
 import { Loader } from "@mantine/core";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 
 const Loading = () => {
   return (

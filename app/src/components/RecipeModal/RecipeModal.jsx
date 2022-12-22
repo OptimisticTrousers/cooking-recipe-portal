@@ -17,7 +17,6 @@ import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useEffect } from "react";
 import { FormLabel } from "@chakra-ui/react";
 
 //example of creating a mui dialog modal for creating new rows
@@ -103,7 +102,7 @@ const RecipeModal = ({
               } else if (column.accessorKey === "recipeContent") {
                 return (
                   <Box key={column.accessorKey}>
-                    <FormControl>
+                    <FormControl sx={{ width: "100%" }}>
                       <FormLabel mb={8}>{column.header}</FormLabel>
                       <ReactQuill
                         ref={contentRef}
@@ -122,7 +121,7 @@ const RecipeModal = ({
                       name={column.accessorKey}
                       defaultValue={currentRowData?.[column.accessorKey]}
                       required
-                      sx={{width: "100%"}}
+                      sx={{ width: "100%" }}
                     />
                   </Box>
                 );

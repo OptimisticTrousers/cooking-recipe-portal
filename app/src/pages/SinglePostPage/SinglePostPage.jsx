@@ -4,7 +4,6 @@ import CSSModules from "react-css-modules";
 import { useParams } from "react-router-dom";
 import parse from "html-react-parser";
 import { BsCalendar3 } from "react-icons/bs";
-import { posts } from "../../data/data";
 import useFetch from "../../hooks/useFetch";
 import { apiDomain } from "../../utils/utils";
 import Loading from "../../components/Loading/Loading";

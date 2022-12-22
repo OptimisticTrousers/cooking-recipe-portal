@@ -3,14 +3,13 @@ import MaterialReactTable from "material-react-table";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import CategoryModal from "../../components/CategoryModal/CategoryModal";
-import { useDisclosure } from "@chakra-ui/react";
 import "bulma/css/bulma.min.css";
-import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { apiDomain } from "../../utils/utils";
 import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
 import Loading from "../../components/Loading/Loading";
+import Time from "../../components/Time/Time";
 
 const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -39,6 +38,7 @@ const Categories = () => {
         accessorKey: "createdAt",
         header: "Created At",
         size: 140,
+        Cell: ({ cell }) => <Time dateString={cell.getValue("createdAt")} />,
       },
     ],
     []
@@ -106,10 +106,6 @@ const Categories = () => {
     },
     [tableData]
   );
-
-  if (!tableData?.length || loading) {
-    return <Loading />;
-  }
 
   return (
     <Box mt={16}>

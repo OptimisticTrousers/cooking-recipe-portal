@@ -10,7 +10,7 @@ import { apiDomain } from "../../utils/utils";
 import useFetch from "../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-import Loading from "../../components/Loading/Loading";
+import Time from "../../components/Time/Time";
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -59,6 +59,7 @@ const Recipes = () => {
         accessorKey: "createdAt",
         header: "Created At",
         size: 80,
+        Cell: ({ cell }) => <Time dateString={cell.getValue("createdAt")} />,
       },
     ],
     []
@@ -123,10 +124,6 @@ const Recipes = () => {
     },
     [tableData]
   );
-
-  if (!tableData?.length || loading) {
-    return <Loading />
-  }
 
   return (
     <Box mt={16} minHeight="100%">
