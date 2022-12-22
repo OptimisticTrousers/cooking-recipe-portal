@@ -8,25 +8,29 @@ import { BsCalendar3 } from "react-icons/bs";
 import { posts } from "../../data/data";
 import useFetch from "../../hooks/useFetch";
 import { apiDomain } from "../../utils/utils";
+import Loading from "../../components/Loading/Loading";
 
 const SinglePostPage = (props) => {
   const { recipeId } = useParams();
 
   const {loading, error, value} = useFetch(`${apiDomain()}/api/recipes/${recipeId}`)
 
-  console.log(value)
+  if(loading) {
+    return <Loading />
+  }
 
   return (
     <article styleName="post">
-      <h2 styleName={`post__title`}>{value?.recipeTitle}</h2>
+      <h2 styleName={`post__title`}>{value.recipeTitle}</h2>
       <hr />
+      <p styleName="post__category">Category: {value.recipeCategory}</p>
       <p styleName="post__date">
         <BsCalendar3 />
-        <Date dateString={value?.createdAt} />
+        {/* <Date dateString={value.createdAt} /> */}
         by
-        <span styleName="post__author">{value?.recipeAuthor}</span>
+        <span styleName="post__author">{value.recipeAuthor}</span>
       </p>
-      <section styleName={`post__description`}>{parse(value?.recipeContent)}</section>
+      <section styleName={`post__description`}>{parse(value.recipeContent)}</section>
     </article>
   );
 };

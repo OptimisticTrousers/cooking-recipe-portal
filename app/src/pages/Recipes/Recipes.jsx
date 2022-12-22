@@ -16,6 +16,7 @@ import {
 import useFetch from "../../hooks/useFetch";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import Loading from "../../components/Loading/Loading";
 
 const Recipes = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -24,7 +25,6 @@ const Recipes = () => {
 
   const { loading, error, value } = useFetch(`${apiDomain()}/api/recipes`);
 
-  console.log(loading, error, value);
   useEffect(() => {
     setTableData(value);
   }, [value]);
@@ -53,7 +53,7 @@ const Recipes = () => {
       {
         accessorKey: "recipeContent",
         header: "Content",
-        size: 140,
+        size: 640,
       },
       {
         accessorKey: "recipeCategory",
