@@ -39,8 +39,8 @@ Beyond that, other learning outcomes were:
 - Designing reusable components
 - Using components from libraries like Bulma, Mantine, Material UI, and Chakra UI
 - Building a fullstack application
-- Using CSS animations
-- Typescript for types
+- Using an interactive table like Material React Table
+- Creating custom react hooks like useFetch
 
 
 ## Features
