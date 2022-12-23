@@ -53,11 +53,7 @@ const RecipeModal = ({
     onClose();
   };
 
-  if(loading) {
-    return
-  }
-
-  return (
+  return open && (
     <Dialog open={open}>
       <form onSubmit={handleSubmit}>
         <DialogTitle textAlign="center">

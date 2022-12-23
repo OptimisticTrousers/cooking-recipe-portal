@@ -83,8 +83,7 @@ const Recipes = () => {
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
       const currentRow = tableData[currentRowIndex];
-      tableData[currentRowIndex] = { ...currentRow, ...values };
-      //send/receive api updates here, then refetch or update local table data for re-render
+      // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
           `${apiDomain()}/api/recipes/${currentRow.recipeId}`,
@@ -94,7 +93,11 @@ const Recipes = () => {
       } catch (err) {
         console.log(err);
       }
-      setTableData([...tableData]);
+      setTableData((prevTableData) => {
+        const newTableData = [...prevTableData];
+        newTableData[currentRowIndex] = { ...currentRow, ...values };
+        return newTableData;
+      });
     }
   };
 
@@ -135,7 +138,7 @@ const Recipes = () => {
           },
         }}
         columns={columns}
-        data={tableData}
+        data={tableData ?? []}
         editingMode="modal" //default
         enableColumnOrdering
         enableEditing

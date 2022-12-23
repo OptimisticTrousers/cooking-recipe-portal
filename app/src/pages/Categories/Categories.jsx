@@ -121,7 +121,7 @@ const Categories = () => {
           },
         }}
         columns={columns}
-        data={tableData}
+        data={tableData ?? []}
         editingMode="modal" //default
         enableColumnOrdering
         enableEditing
