@@ -69,6 +69,7 @@ const Recipes = () => {
     values.recipeId = uuidv4();
     // here is the change i will make
     values.createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
+    console.log(values)
 
     try {
       const { data } = await axios.post(`${apiDomain()}/api/recipes`, values);

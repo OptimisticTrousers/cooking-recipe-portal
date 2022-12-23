@@ -21,7 +21,7 @@ Router.route("/")
       recipeAuthor,
       createdAt,
       recipeContent,
-      recipeCategory,
+      categoryId,
     } = req.body;
     const post = [
       recipeId,
@@ -29,7 +29,7 @@ Router.route("/")
       recipeAuthor,
       createdAt,
       recipeContent,
-      recipeCategory,
+      categoryId,
     ];
     const sql =
       "INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)";

@@ -29,7 +29,7 @@ const CategoryModal = ({
       categoryName: categoryName.value,
       categoryDescription: categoryDescription.value,
     };
-    if (currentRowIndex) {
+    if (currentRowIndex !== undefined) {
       handleSaveRowEdits(category);
     } else {
       handleCreateNewRow(category);
@@ -74,7 +74,7 @@ const CategoryModal = ({
         <DialogActions sx={{ p: "1.25rem" }}>
           <Button onClick={onClose}>Cancel</Button>
           <Button color="secondary" type="submit" variant="contained">
-            {currentRowData?.categoryId ? "Update Recipe" : "Create New Recipe"}
+            {currentRowData?.categoryId ? "Update Category" : "Create New Category"}
           </Button>
         </DialogActions>
       </form>

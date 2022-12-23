@@ -8,8 +8,8 @@ import axios from "axios";
 import { apiDomain } from "../../utils/utils";
 import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
-import Loading from "../../components/Loading/Loading";
 import Time from "../../components/Time/Time";
+import { v4 as uuidv4 } from "uuid";
 
 const Categories = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -24,6 +24,11 @@ const Categories = () => {
 
   const columns = useMemo(
     () => [
+      {
+        accessorKey: "categoryId",
+        header: "ID",
+        size: 140,
+      },
       {
         accessorKey: "categoryName",
         header: "Name",
@@ -45,6 +50,7 @@ const Categories = () => {
   );
 
   const handleCreateNewRow = async (values) => {
+    values.categoryId = uuidv4();
     values.createdAt = new Date().toISOString().slice(0, 19).replace("T", " ");
     try {
       const { data } = await axios.post(
@@ -61,11 +67,12 @@ const Categories = () => {
 
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[currentRowIndex] = values;
+      const currentRow = tableData[currentRowIndex];
+      tableData[currentRowIndex] = {...currentRow, ...values}
       // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/categories/${values.categoryName}`,
+          `${apiDomain()}/api/categories/${currentRow.categoryId}`,
           values
         );
         console.log(data);
@@ -92,7 +99,7 @@ const Categories = () => {
       // send api delete request here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.delete(
-          `${apiDomain()}/api/categories/${row.original.categoryName}`
+          `${apiDomain()}/api/categories/${row.original.categoryId}`
         );
         if (data.sqlMessage) {
           alert(

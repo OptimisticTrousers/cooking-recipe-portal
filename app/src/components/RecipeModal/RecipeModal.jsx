@@ -39,10 +39,14 @@ const RecipeModal = ({
     const { recipeTitle, recipeAuthor, recipeCategory } =
       event.currentTarget.elements;
     const recipeContent = contentRef.current.value;
+    const category = value.find(
+      (category) => category.categoryName === recipeCategory.value
+    );
     const recipe = {
       recipeTitle: recipeTitle.value,
       recipeAuthor: recipeAuthor.value,
-      recipeCategory: recipeCategory.value,
+      categoryId: category.categoryId,
+      recipeCategory: category.categoryName,
       recipeContent,
     };
     if (currentRowIndex) {

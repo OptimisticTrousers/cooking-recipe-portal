@@ -15,17 +15,15 @@ Router.route("/")
     });
   })
   .post((req, res, next) => {
-    const category = {
-      categoryName: req.body.categoryName,
-      categoryDescription: req.body.categoryDescription,
-      createdAt: req.body.createdAt,
-    };
+    const category = { ...req.body };
     mysqlConnect.query(
       "INSERT INTO categories SET?",
       category,
       (err, results) => {
         if (!err) {
-          res.status(201).send(`category added with ID:${results.insertId}`);
+          res
+            .status(201)
+            .send(`Category added with name:${category.categoryName}`);
         } else {
           console.log(err);
         }
@@ -33,18 +31,31 @@ Router.route("/")
     );
   });
 
-Router.route("/:categoryName")
-  .put((req, res) => {
-    const category = {
-      categoryName: req.body.categoryName,
-      categoryDescription: req.body.categoryDescription,
-    };
+Router.route("/:categoryId")
+  .get((req, res) => {
+    const id = req.params.categoryId;
     mysqlConnect.query(
-      "UPDATE categories SET ? WHERE categoryName = ?",
-      [category, req.body.categoryName],
+      "SELECT * FROM recipes WHERE categoryId= ?",
+      [id],
       (err, results) => {
         if (!err) {
-          res.send(`Recipe update with name: ${req.body.categoryName}`);
+          const [row] = results;
+          res.status(200).send(row);
+        } else {
+          console.log(err);
+        }
+      }
+    );
+  })
+  .put((req, res) => {
+    const category = { ...req.body };
+    const categoryId = req.params.categoryId;
+    mysqlConnect.query(
+      "UPDATE categories SET ? WHERE categoryId = ?",
+      [category, categoryId],
+      (err, results) => {
+        if (!err) {
+          res.send(`Category update with id: ${categoryId}`);
         } else {
           console.log(err);
         }
@@ -52,13 +63,13 @@ Router.route("/:categoryName")
     );
   })
   .delete((req, res) => {
-    const id = req.params.categoryName;
+    const categoryId = req.params.categoryId;
     mysqlConnect.query(
-      "DELETE FROM categories WHERE categoryName = ?",
-      id,
+      "DELETE FROM categories WHERE categoryId = ?",
+      categoryId,
       (err, results) => {
         if (!err) {
-          res.send(`category deleted with ID: ${id}`);
+          res.send(`Category deleted with ID: ${categoryId}`);
         } else {
           res.send(err);
         }
