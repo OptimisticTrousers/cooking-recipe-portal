@@ -35,16 +35,16 @@ Router.route("/")
 
 Router.route("/:categoryName")
   .put((req, res) => {
+    const categoryName = req.params.categoryName
     const category = {
-      categoryName: req.body.categoryName,
       categoryDescription: req.body.categoryDescription,
     };
     mysqlConnect.query(
       "UPDATE categories SET ? WHERE categoryName = ?",
-      [category, req.body.categoryName],
+      [category, categoryName],
       (err, results) => {
         if (!err) {
-          res.send(`Recipe update with name: ${req.body.categoryName}`);
+          res.send(`Recipe update with name: ${categoryName}`);
         } else {
           console.log(err);
         }

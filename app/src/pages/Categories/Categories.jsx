@@ -61,11 +61,12 @@ const Categories = () => {
 
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[currentRowIndex] = values;
+      const currentRow = tableData[currentRowIndex];
+      tableData[currentRowIndex] = {...currentRow, ...values}
       // send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/categories/${values.categoryName}`,
+          `${apiDomain()}/api/categories/${currentRow.categoryName}`,
           values
         );
         console.log(data);

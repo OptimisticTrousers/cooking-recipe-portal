@@ -82,11 +82,12 @@ const Recipes = () => {
 
   const handleSaveRowEdits = async (values) => {
     if (!Object.keys(validationErrors).length) {
-      tableData[currentRowIndex] = values;
+      const currentRow = tableData[currentRowIndex];
+      tableData[currentRowIndex] = { ...currentRow, ...values };
       //send/receive api updates here, then refetch or update local table data for re-render
       try {
         const { data } = await axios.put(
-          `${apiDomain()}/api/recipes/${values.recipeId}`,
+          `${apiDomain()}/api/recipes/${currentRow.recipeId}`,
           values
         );
         console.log(data);

@@ -24,14 +24,19 @@ const CategoryModal = ({
   const handleSubmit = (event) => {
     //put your validation logic here
     event.preventDefault();
-    const { categoryName, categoryDescription } = event.currentTarget.elements;
-    const category = {
-      categoryName: categoryName.value,
-      categoryDescription: categoryDescription.value,
-    };
     if (currentRowIndex) {
+      const { categoryDescription } = event.currentTarget.elements;
+      const category = {
+        categoryDescription: categoryDescription.value,
+      };
       handleSaveRowEdits(category);
     } else {
+      const { categoryName, categoryDescription } =
+        event.currentTarget.elements;
+      const category = {
+        categoryName: categoryName.value,
+        categoryDescription: categoryDescription.value,
+      };
       handleCreateNewRow(category);
     }
     onClose();
@@ -56,7 +61,9 @@ const CategoryModal = ({
             {columns.map((column) => {
               if (
                 column.accessorKey === "categoryId" ||
-                column.accessorKey === "createdAt"
+                column.accessorKey === "createdAt" ||
+                (column.accessorKey === "categoryName" &&
+                  currentRowIndex !== undefined)
               )
                 return;
               return (

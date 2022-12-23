@@ -35,7 +35,7 @@ Router.route("/")
       "INSERT INTO recipes (recipeId,recipeTitle,recipeAuthor,createdAt,recipeContent,recipeCategory) VALUES (?,?,?,?,?,?)";
     mysqlConnect.query(sql, post, (err, results) => {
       if (!err) {
-        res.status(201).send(`post added with ID:${results.insertId}`);
+        res.status(201).send(`Recipe added with ID:${recipeId}`);
       } else {
         console.log(err);
       }
