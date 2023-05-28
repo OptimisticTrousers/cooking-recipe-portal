@@ -18,6 +18,11 @@
 ![Create Recipe Modal](https://user-images.githubusercontent.com/36343664/209451954-f2ed3c71-8289-442e-acc9-190bdc06f44b.png)
 ![Update Category Modal](https://user-images.githubusercontent.com/36343664/209451955-7810f7b9-1abd-4d74-8edc-6831f0346a0c.png)
 
+## Showcase
+
+[cooking-recipes.webm](https://github.com/OptimisticTrousers/cooking-recipe-portal/assets/36343664/58c279b2-5c1b-4c29-8379-2dab8d194102)
+
+
 ### Tables Used
 
 CREATE TABLE categories(
