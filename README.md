@@ -4,7 +4,7 @@
 
 [App] Creating a cooking recipes SQL portal using SQL, React.js, Express.js, and several component libraries. Final project for CS 306 Database Design at NJCU. Built by Tony Isern, Eliza Clamor, and Souley Abdoul Aziz. 
 
-> Live deployment on a Digital Ocean droplet, configured with an NGINX reverse proxy, added an SSL certificate using Let's Encrypt, and served over HTTPS.
+> Live deployment on a Digital Ocean droplet, configured with an NGINX reverse proxy, added an SSL certificate using Let's Encrypt, and served over HTTPS: https://cooking-recipes-portal.netlify.app/
 > Or clone repo, cd into app, then run "npm run dev"
 > Or clone repo, cd into server, then run "npm run dev"
 > Create your own local MySQL database and create a .env file with a DB_HOST, DB_USER, DB_PASSWORD, and DB properties
