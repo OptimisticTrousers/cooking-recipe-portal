@@ -4,7 +4,7 @@
 
 [App] Creating a cooking recipes SQL portal using SQL, React.js, Express.js, and several component libraries. Final project for CS 306 Database Design at NJCU. Built by Tony Isern, Eliza Clamor, and Souley Abdoul Aziz. 
 
-> Live deployment coming soon...
+> Live deployment on a Digital Ocean droplet, configured with an NGINX reverse proxy, added an SSL certificate using Let's Encrypt, and served over HTTPS.
 > Or clone repo, cd into app, then run "npm run dev"
 > Or clone repo, cd into server, then run "npm run dev"
 > Create your own local MySQL database and create a .env file with a DB_HOST, DB_USER, DB_PASSWORD, and DB properties
@@ -17,11 +17,6 @@
 ![Single Recipe Page](https://user-images.githubusercontent.com/36343664/209451953-21609535-91f7-4fc8-802b-92eb8d98a807.png)
 ![Create Recipe Modal](https://user-images.githubusercontent.com/36343664/209451954-f2ed3c71-8289-442e-acc9-190bdc06f44b.png)
 ![Update Category Modal](https://user-images.githubusercontent.com/36343664/209451955-7810f7b9-1abd-4d74-8edc-6831f0346a0c.png)
-
-
-
-
-
 
 ### Tables Used
 
