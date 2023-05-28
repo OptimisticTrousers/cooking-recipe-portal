@@ -86,6 +86,49 @@ Beyond that, other learning outcomes were:
 - [Express](https://expressjs.com/) - Web framework
 - [MySQL](https://www.mysql.com/) - Relational database
 
+<h2 style='width:100%;text-align:center'>How To Use</h2>
+
+- Clone this Repo
+- Install Dependencies inside of the "/app" directory from the root project
+
+  ```bash
+  cd app && npm install
+  ```
+  
+- Install Dependencies inside of the "/server" directory from the root project
+
+  ```bash
+  cd server && npm install
+  ```
+  
+- Setup the MySQL Server on your local computer using this link: https://dev.mysql.com/doc/mysql-getting-started/en/
+
+- Add `env` file in the root folder of the "/server" directory:
+
+  ```bash
+  DB_HOST=localhost
+  DB_USER=root
+  DB_PASSWORD=password
+  DB=my_db
+  ```
+- Add `env` file in the root folder of the "/app" directory:
+
+  ```bash
+  VITE_API_DOMAIN=https://example-api-domain.com
+  ```
+
+- Run Development Server using the same command inside of the "/app" to start the front-end
+
+  ```bash
+  npm run dev
+  ```
+  
+  
+- Run Development Server using the same command inside of the "/server" to start the backend-end
+
+  ```bash
+  npm run dev
+  ```
 
 ## Areas for Improvement
 
