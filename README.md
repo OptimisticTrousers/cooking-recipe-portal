@@ -2,7 +2,7 @@
 
 ## Description
 
-[App] Creating a cooking recipes SQL portal using SQL, React.js, Express.js, and several component libraries. Final project for CS 306 Database Design at NJCU. Built by Tony Isern, Eliza Clamor, and Souley Abdoul Aziz. 
+[App] Creating a cooking recipes SQL portal using SQL, React.js, Express.js, and several component libraries. Built by Ranvijay Tanwar. 
 
 > Live deployment on a Digital Ocean droplet, configured with an NGINX reverse proxy, added an SSL certificate using Let's Encrypt, and served over HTTPS: https://cooking-recipes-portal.netlify.app/
 > Or clone repo, cd into app, then run "npm run dev"
@@ -20,7 +20,7 @@
 
 ## Showcase
 
-[cooking-recipes.webm](https://github.com/OptimisticTrousers/cooking-recipe-portal/assets/36343664/58c279b2-5c1b-4c29-8379-2dab8d194102)
+[cooking-recipes.webm]((https://github.com/ranvii07/cooking-recipe-portal))
 
 
 ### Tables Used
